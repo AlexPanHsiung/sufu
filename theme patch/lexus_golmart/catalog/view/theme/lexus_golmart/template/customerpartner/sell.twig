@@ -1,0 +1,220 @@
+{{ header }}
+
+<style>
+  .wk-seller-thumb {
+    margin-bottom: 20px;
+    box-shadow:0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important
+  }
+
+  .wk-seller-thumb .thumbnail {
+    border: none;
+    border-radius:
+    none;margin: 0;
+  }
+
+  .wk-seller-thumb .wk-caption {
+    background: #0b9bc2;
+    padding: 15px 5px 5px 5px;
+  }
+
+  .wk-seller-thumb{
+    color: white;
+  }
+
+  .wk-caption a{
+    color: #0000EE;
+  }
+
+  .wk-seller-thumb .wk-caption p {
+    margin: 3px 0;
+    color: white;
+  }
+</style>
+<div class="container">
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class}}">{{ content_top}}
+      <div class="text-center">
+        <h1 class="text-info">{{ sell_header}}</h1>
+        <a href="index.php?route=account/register" type="button" class="btn btn-primary btn-lg">
+          {{ sell_title}}
+        </a>
+      </div>
+      <br/>
+      {% if tabs %}
+      <ul class="nav nav-tabs">
+        {% for key, value in tabs %}
+            <li {% if not key %} class="active" {% endif %}><a href="{{ '#tab-' ~ key}}" data-toggle="tab">{{ value['hrefValue']}}</a></li>
+        {% endfor %}
+      </ul>
+      <div class="tab-content">
+        {% for key, value in tabs %}
+          <div id="{{ 'tab-' ~ key}}" class="tab-pane {% if not key %} active {% endif %}">{{ value['description']}}</div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+      <br/>
+      {% if showpartners %}
+      <h3><b>{{ text_long_time_seller}}</b></h3>
+      <div class="row">
+        {% for partner in partners %}
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="wk-seller-thumb">
+            <div class="thumbnail">
+              <a href="{{ partner['sellerHref']}}">
+                {% if partner['thumb'] %}
+                  <img src="{{ partner['thumb']}}" alt="{{ partner['name']}}"
+                  title="{{ partner['name']}}" class="img-responsive"/>
+                {% else %}
+                  <div style="background-color:{{ partner['backgroundcolor']}}"></div>
+                {% endif %}
+
+              </a>
+            </div>
+            <div class="wk-caption">
+              <a href="{{ partner['sellerHref']}}"><b>{{ partner['name']}}</b></a>
+              {% if partner['country'] %}
+                <p style="max-width:135px;line-height:14px;">{{ text_from }}<span data-toggle="tooltip" title="{{ text_from}}"><i class="fa fa-home"></i></span><b>{{ partner['country']}}</b></p>
+              {% endif %}
+              <p>{{ text_total_products}}{{ partner['total_products']}}</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% if showproducts %}
+      <h3><b>{{ text_latest_product}}</b></h3>
+    <!--   <div class="row">
+        <div class="col-sm-3 hidden-xs">
+          <div class="btn-group">
+            <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_list}}"><i class="fa fa-th-list"></i></button>
+            <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_grid}}"><i class="fa fa-th"></i></button>
+          </div>
+        </div>
+        <div class="col-sm-1 col-sm-offset-2 text-right">
+          <label class="control-label" for="input-sort">{{ text_sort}}</label>
+        </div>
+        <div class="col-sm-3 text-right">
+          <select id="input-sort" class="form-control col-sm-3" onchange="location = this.value;">
+            {% for sorts in sorts %}
+            {% if sorts['value'] == sort ~ '-' ~ order %}
+            <option value="{{ sorts['href']}}" selected="selected">{{ sorts['text']}}</option>
+            {% else %}
+            <option value="{{ sorts['href']}}">{{ sorts['text']}}</option>
+            {% endif %}
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-sm-1 text-right">
+          <label class="control-label" for="input-limit">{{ text_limit}}</label>
+        </div>
+        <div class="col-sm-2 text-right">
+          <select id="input-limit" class="form-control" onchange="location = this.value;">
+            {% for limits in limits  %}
+            {% if limits['value'] == limit %}
+            <option value="{{ limits['href']}}" selected="selected">{{ limits['text']}}</option>
+            {% else %}
+            <option value="{{ limits['href']}}">{{ limits['text']}}</option>
+            {% endif %}
+            {% endif %}
+          </select>
+        </div>
+      </div> -->
+      <br>
+     <?php
+  $config = $this->registry->get('config');
+
+
+  $themeConfig = (array)$config->get('themecontrol');
+  $theme  = $config->get('config_template');
+   $listingConfig = array(
+    'listing_products_columns'            => 0,
+    'listing_products_columns_small'        => 2,
+    'listing_products_columns_minismall'      => 1,
+    'cateogry_display_mode'             => 'grid',
+    'category_pzoom'                    => 1,
+    'quickview'                                 => 0,
+    'show_swap_image'                         => 0,
+    'product_layout'              => 'default',
+    'catalog_mode'                => 0,
+    'enable_paneltool'              => 0
+  );
+  $listingConfig    = array_merge($listingConfig, $themeConfig );
+  $DISPLAY_MODE     = $listingConfig['cateogry_display_mode'];
+  $MAX_ITEM_ROW     = $listingConfig['listing_products_columns']?$listingConfig['listing_products_columns']:4;
+  $MAX_ITEM_ROW_SMALL = $listingConfig['listing_products_columns_small']?$listingConfig['listing_products_columns_small']:2;
+  $MAX_ITEM_ROW_MINI  = $listingConfig['listing_products_columns_minismall']?$listingConfig['listing_products_columns_minismall']:1;
+  $categoryPzoom      = $listingConfig['category_pzoom'];
+  $quickview          = $listingConfig['quickview'];
+  $swapimg            = ($listingConfig['show_swap_image'])?'swap':'';
+
+
+  if( isset($_COOKIE[$theme.'_productlayout']) && $listingConfig['enable_paneltool'] && $_COOKIE[$theme.'_productlayout'] ){
+    $listingConfig['product_layout'] = trim($_COOKIE[$theme.'_productlayout']);
+  }
+
+  require( ThemeControlHelper::getLayoutPath( 'product/product_filter.twig' ) );
+  $productLayout = DIR_TEMPLATE.$theme.'/template/common/product/'.$listingConfig['product_layout'].'.twig';
+  if( !is_file($productLayout) ){
+    $listingConfig['product_layout'] = 'default';
+  }
+
+}}
+
+<div id="products" class="product-{{ DISPLAY_MODE}}">
+  <div class="products-block col-nopadding">
+    <?php
+    $cols = $MAX_ITEM_ROW ;
+    $span = floor(12/$cols);
+    $small = floor(12/$MAX_ITEM_ROW_SMALL);
+    $mini = floor(12/$MAX_ITEM_ROW_MINI);
+    foreach ($latest as $i => $product) { }}
+    <?php if( $i++%$cols == 0 ) { }}
+    <div class="row products-row">
+    {% endif %}
+    <?php
+      // echo $listingConfig['product_layout']; die;
+    }}
+               <div class="col-lg-{{ span}} col-md-{{ span}} col-sm-{{ span}} col-xs-{{ mini}} product-col border">
+
+      <?php require( ThemeControlHelper::getLayoutPath( 'common/product/'.$listingConfig['product_layout'].'.twig' ) );  }}
+    </div>
+
+    <?php if( $i%$cols == 0 || $i==count($latest) ) { }}
+    </div>
+    {% endif %}
+    {% endif %}
+
+</div>
+</div>
+      <div class="paging space-padding-tb-30 clearfix">
+  <div class="pull-left">{{ pagination}}</div>
+  <div class="pull-right">{{ results}}</div>
+</div>
+      {% endif %}
+      {{ content_bottom}}</div>
+    {{ column_right}}</div>
+</div>
+<script>
+var seller_display = function (data){
+  thisid = data.currentTarget.id; //get id of current selector
+  $('#'+ thisid + ' .wk_seller_info').slideDown();
+  $('#'+ thisid).unbind('mouseenter');
+}
+var seller_hide = function (data){
+  thisid = data.currentTarget.id; //get id of current selector
+  $('#'+ thisid + ' .wk_seller_info').slideUp('slow',function(){
+    $('.seller-thumb').bind('mouseenter',seller_display);
+  });
+}
+
+
+</script>
+{{ footer}}

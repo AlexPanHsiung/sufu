@@ -1,0 +1,64 @@
+{{ header }}<?php require( ThemeControlHelper::getLayoutPath( 'common/mass-header.twig' )  )}}
+<div class="container">
+<?php require( ThemeControlHelper::getLayoutPath( 'common/mass-container.twig' )  )}}
+  {% if error_warning %}
+  <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>{{ error_warning}}</div>
+  {% endif %}
+  <div class="row">  <?php if( $SPAN[0] ): }}
+      <aside id="sidebar-left" class="col-md-{{ SPAN[0]}}">
+        {{ column_left }}
+      </aside>  
+    <?php endif}}
+    <div id="sidebar-main" class="col-md-{{ SPAN[1]}}"><div id="content"> {{ content_top}}
+      <h1>
+        {{ heading_title}}
+        <div class="pull-right">
+          <button type="submit" form="form-shipping" data-toggle="tooltip" title="{{ button_save}}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+          <a href="{{ cancel}}" data-toggle="tooltip" title="{{ button_cancel}}" class="btn btn-default"><i class="fa fa-reply"></i></a>            
+        </div>
+      </h1>
+
+      <fieldset>
+      <legend><i class="fa fa-list"></i> {{ text_mpshipping}}</legend>
+      {% if isMember %}
+        <div class="alert alert-info"><i class="fa fa-exclamation-circle"></i> {{ text_separator_info}}
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        <form action="{{ action}}" method="post" enctype="multipart/form-data" id="form-shipping" class="form-horizontal">
+
+          {% if shippingTable %}
+            {% for value in shippingTable %}
+              <div class="form-group">
+                  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="">{{ (value|replace({'_' : ' '}))|capitalize }}</span></label>
+
+                  <div class="col-sm-10">
+                    <select name="{{ value}}" class="form-control">
+                        <option value=""></option>
+                        {% for key, field in fields %}
+                          <option value="{{ key}}" {% if field|lower == value|lower %}{{ 'selected' }}{%endif %} >{{ field}}</option>
+                        {% endif %}                        
+                        </select>
+                  </div>
+                </div>
+            {% endif %}
+          {% endif %}       
+        </form>
+      {% else %}
+        <div class="text-danger">
+          {{ error_warning_authenticate}}
+        </div>
+      {% endif %}
+    </fieldset>
+
+    {{ content_bottom}}</div>
+<?php if( $SPAN[2] ): }}
+  <aside id="sidebar-right" class="col-md-{{ SPAN[2]}}">{{ column_right}}</aside>
+<?php endif}}
+</div> 
+</div>
+{% else %}
+  <h2 style='color:#F93D49;'>Please inform Admin</h2>
+{% endif %}
+{{ column_right}}</div>
+  </div>
+{{ footer}}

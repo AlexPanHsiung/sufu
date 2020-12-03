@@ -1,0 +1,173 @@
+<?php
+// Heading
+$_['heading_title'] 			  = 'New Amazon listing';
+$_['text_title_advanced'] 		  = 'Advanced listing';
+$_['text_openbay'] 				  = 'OpenBay Pro';
+$_['text_amazon'] 				  = 'Amazon EU';
+
+// Buttons
+//$_['button_new'] 				  = 'Create new product';
+$_['button_new'] 				  = '建立新產品';
+//$_['button_amazon_price'] 		  = 'Get Amazon price';
+$_['button_amazon_price'] 		  = '獲取Amazon價格';
+//$_['button_list'] 				  = 'List on Amazon';
+$_['button_list'] 				  = 'List on Amazon';
+//$_['button_remove_error'] 		  = 'Remove error messages';
+$_['button_remove_error'] 		  = '刪除錯誤信息';
+//$_['button_save_upload'] 		  = 'Save and upload';
+$_['button_save_upload'] 		  = '保存並上傳';
+$_['button_browse'] 			  = 'Browse';
+$_['button_saved_listings'] 	  = 'View saved listings';
+$_['button_remove_links'] 		  = 'Remove links';
+$_['button_create_new_listing']   = 'Create new listing';
+
+// Help
+//$_['help_sku'] 					  = 'Unique product\'s ID assigned by the merchant';
+$_['help_sku'] 					  = '商家分配的唯一商品ID';
+//$_['help_restock_date'] 		  = 'This is the date you will be able to ship any back-ordered items to a customer. This date should not be greater than 30 days from the date listed or orders received may automatically be canceled.';
+$_['help_restock_date'] 		  = '這是您可以將任何延期交貨的物品運送給客戶的日期。 該日期不得超過所列日期的30天，否則收到的訂單可能會自動取消。';
+//$_['help_sale_price'] 			  = 'Sale Price must have a start and end date';
+$_['help_sale_price'] 			  = '銷售價格必須有開始和結束日期';
+
+// Text
+//$_['text_products_sent'] 		  = 'Products were sent for processing';
+$_['text_products_sent'] 		  = '產品已送去加工';
+//$_['button_view_on_amazon'] 	  = 'View on Amazon';
+$_['button_view_on_amazon'] 	  = 'View on Amazon';
+$_['text_list'] 				  = 'List on Amazon';
+$_['text_new'] 					  = 'New';
+$_['text_used_like_new'] 		  = 'Used - Like New';
+$_['text_used_very_good'] 		  = 'Used - Very Good';
+$_['text_used_good'] 			  = 'Used - Good';
+$_['text_used_acceptable'] 		  = 'Used - Acceptable';
+$_['text_collectible_like_new']   = 'Collectible - Like New';
+$_['text_collectible_very_good']  = 'Collectible - Very Good';
+$_['text_collectible_good'] 	  = 'Collectible - Good';
+$_['text_collectible_acceptable'] = 'Collectible - Acceptable';
+//$_['text_refurbished'] 			  = 'Refurbished';
+$_['text_refurbished'] 			  = '翻新的';
+//$_['text_product_not_sent'] 	  = 'Product was not sent to Amazon. Reason: %s';
+$_['text_product_not_sent'] 	  = '產品未發送到Amazon。原因： %s';
+//$_['text_not_in_catalog'] 		  = 'Or, if it is not in the catalog&nbsp;&nbsp;&nbsp;';
+$_['text_not_in_catalog'] 		  = '或者，如果它不在目錄中&nbsp;&nbsp;&nbsp;';
+//$_['text_placeholder_search'] 	  = 'Enter product name, UPC, EAN, ISBN or ASIN';
+$_['text_placeholder_search'] 	  = '輸入產品名稱，UPC，EAN，ISBN或ASIN';
+//$_['text_placeholder_condition']  = 'Use this box to describe the condition of your products.';
+$_['text_placeholder_condition']  = '使用此框描述您的產品狀況。';
+//$_['text_characters'] 			  = 'characters';
+$_['text_characters'] 			  = 'characters';
+//$_['text_uploaded'] 			  = 'Saved listing(s) uploaded!';
+$_['text_uploaded'] 			  = 'Saved listing(s) uploaded!';
+//$_['text_saved_local'] 			  = 'Listing saved but not uploaded yet';
+$_['text_saved_local'] 			  = '列表已保存但尚未上傳';
+//$_['text_product_sent'] 		  = 'Product was successfully sent to Amazon.';
+$_['text_product_sent'] 		  = '產品已成功發送到Amazon。';
+//$_['text_links_removed'] 		  = 'Amazon product links deleted';
+$_['text_links_removed'] 		  = 'Amazon產品連接已刪除';
+//$_['text_product_links'] 		  = 'Product links';
+$_['text_product_links'] 		  = '產品連接';
+//$_['text_has_saved_listings'] 	  = 'This product has one or more saved listings that is not uploaded';
+$_['text_has_saved_listings'] 	  = '該產品具有一個或多個未上傳的已保存列表';
+//$_['text_edit_heading'] 		  = 'Edit listing';
+$_['text_edit_heading'] 		  = '編輯清單';
+//$_['text_germany'] 				  = 'Germany';
+$_['text_germany'] 				  = '德國';
+//$_['text_france'] 				  = 'France';
+$_['text_france'] 				  = '法國';
+//$_['text_italy'] 				  = 'Italy';
+$_['text_italy'] 				  = '意大利';
+//$_['text_spain'] 				  = 'Spain';
+$_['text_spain'] 				  = '西班牙';
+//$_['text_united_kingdom'] 		  = 'United Kingdom';
+$_['text_united_kingdom'] 		  = '英國';
+
+// Columns
+//$_['column_image'] 				  = 'Image';
+$_['column_image'] 				  = '圖片';
+//$_['column_asin'] 				  = 'ASIN';
+$_['column_asin'] 				  = 'ASIN';
+//$_['column_price'] 				  = 'Price';
+$_['column_price'] 				  = '價錢';
+$_['column_action'] 			  = 'Action';
+//$_['column_name'] 				  = 'Product Name';
+$_['column_name'] 				  = '產品名稱';
+//$_['column_model'] 				  = 'Model';
+$_['column_model'] 				  = 'Model';
+$_['column_combination'] 		  = 'Variant Combination';
+$_['column_sku_variant'] 		  = 'Variant SKU';
+$_['column_sku'] 				  = 'Product SKU';
+$_['column_amazon_sku'] 		  = 'Amazon item SKU';
+
+// Entry
+$_['entry_sku'] 				  = 'SKU';
+//$_['entry_condition'] 			  = 'Condition';
+$_['entry_condition'] 			  = '條件';
+//$_['entry_condition_note'] 		  = 'Condition Note';
+$_['entry_condition_note'] 		  = '條件說明';
+$_['entry_price'] 				  = 'Price';
+$_['entry_sale_price'] 			  = 'Sale Price';
+$_['entry_sale_date'] 			  = 'Sale date range';
+//$_['entry_quantity'] 			  = 'Quantity';
+$_['entry_quantity'] 			  = '數量';
+//$_['entry_start_selling'] 		  = 'Available from date';
+$_['entry_start_selling'] 		  = 'Available from date';
+//$_['entry_restock_date'] 		  = 'Restock Date';
+$_['entry_restock_date'] 		  = '補貨日期';
+//$_['entry_country_of_origin'] 	  = 'Country of Origin';
+$_['entry_country_of_origin'] 	  = '來源國家';
+//$_['entry_release_date'] 		  = 'Release Date';
+$_['entry_release_date'] 		  = '發布日期';
+$_['entry_from'] 				  = 'Date from';
+$_['entry_to'] 					  = 'Date to';
+//$_['entry_product'] 			  = 'Listing for product';
+$_['entry_product'] 			  = '產品清單';
+//$_['entry_category'] 			  = 'Amazon category';
+$_['entry_category'] 			  = 'Amazon類別';
+//$_['entry_browse_node'] 		  = 'Choose browse node';
+$_['entry_browse_node'] 		  = '選擇瀏覽節點';
+$_['entry_marketplace'] 		  = 'Marketplace';
+
+//Tabs
+//$_['tab_main'] 					  = 'Main';
+$_['tab_main'] 					  = '主要';
+//$_['tab_required'] 				  = 'Required info';
+$_['tab_required'] 				  = '必填信息';
+//$_['tab_additional'] 			  = 'Additional options';
+$_['tab_additional'] 			  = '附加選項';
+
+// Error
+//$_['error_required'] 			  = 'This field is required!';
+$_['error_required'] 			  = '這是必填欄！';
+//$_['error_not_saved'] 			  = 'Listing was not saved. Check you have filled in all fields';
+$_['error_not_saved'] 			  = '清單未保存。檢查您是否已填寫所有字段';
+//$_['error_char_limit'] 			  = 'characters over the limit';
+$_['error_char_limit'] 			  = '超過限制的字';
+//$_['error_length'] 				  = 'Minimum length is';
+$_['error_length'] 				  = '最小長度為';
+//$_['error_upload_failed'] 		  = 'Failed uploading product with SKU: "%s". Reason: "%s" Uploading process canceled.';
+$_['error_upload_failed'] 		  = '使用SKU："%s"上傳產品失敗。 原因："%s"上載過程已取消。';
+//$_['error_load_nodes'] 			  = 'Unable to load browse nodes';
+$_['error_load_nodes'] 			  = '無法加載瀏覽節點';
+//$_['error_connecting'] 			  = 'There was problem connecting to the API. Please check your OpenBay Pro Amazon extension settings. If the problem persists, please contact support.';
+$_['error_connecting'] 			  = '連接到API時出現問題。 請檢查您的OpenBay Pro Amazon擴展設定。 如果問題仍然存在，請聯繫支持。';
+//$_['error_text_missing'] 		  = 'You must enter some search details';
+$_['error_text_missing'] 		  = '您必須輸入一些搜索詳細信息';
+$_['error_missing_asin'] 		  = 'ASIN is missing';
+//$_['error_marketplace_missing']   = 'Please select a marketplace';
+$_['error_marketplace_missing']   = '請選擇一個市場';
+//$_['error_condition_missing'] 	  = 'Please select condition';
+$_['error_condition_missing'] 	  = '請選擇條件';
+//$_['error_amazon_price'] 		  = 'Could not get the price from Amazon';
+$_['error_amazon_price'] 		  = '無法從Amazon獲得價格';
+//$_['error_stock'] 				  = 'You cannot list an item with less than 1 item in stock';
+$_['error_stock'] 				  = '您不能列出庫存中少於1件的產品';
+//$_['error_sku'] 				  = 'You must enter an SKU for the item';
+$_['error_sku'] 				  = '您必須輸入商品的SKU';
+//$_['error_price'] 				  = 'You must enter a price for the item';
+$_['error_price'] 				  = '您必須輸入商品的價格';
+//$_['error_sending_products'] 	  = 'Could not send products for listing. Please contact support';
+$_['error_sending_products'] 	  = '無法將產品發送到列表中。請聯繫支持';
+//$_['error_no_products_selected']  = 'No products were selected for listing';
+$_['error_no_products_selected']  = '沒有選擇要上市的產品';
+//$_['error_not_searched'] 		  = 'Search for matching items before you try to list. Items must be matched against an Amazon catalog item';
+$_['error_not_searched'] 		  = '嘗試列出之前，先搜索匹配的項目。物品必須與Amazon商品匹配';

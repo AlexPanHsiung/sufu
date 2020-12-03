@@ -1,0 +1,244 @@
+<div id="seller-collection">
+
+<!-- for category list-->
+{% if categories %}
+	<column id="column-left" style="display:none">
+		<ul class="mp-list-group" id="category-menu" style="display:none">
+			{% for category in categories %}
+				{% if category['category_id'] == category_id %}
+					<li class="mp-list-group-item mp-active">
+						<a data-collection-url="{{ category['href']}}">{{ category['name']}}</a>
+					</li>
+					{% if category['children'] %}
+						{% for child in category['children'] %}
+							{% if child['category_id'] == child_id %}
+								<li class="mp-list-group-item mp-active">
+									<a data-collection-url="{{ child['href']}}">&nbsp;&nbsp;&nbsp;- {{ child['name']}}</a>
+								</li>
+							{% else %}
+								<li class="mp-list-group-item">
+									<a data-collection-url="{{ child['href']}}" >&nbsp;&nbsp;&nbsp;- {{ child['name']}}</a>
+								</li>
+							{% endif %}
+						{% endif %}
+					{% endif %}
+				{% else %}
+				<li class="mp-list-group-item">
+					<a data-collection-url="{{ category['href']}}" >{{ category['name']}}</a>
+				</li>
+				{% endif %}
+			{% endif %}
+		</ul>
+	</column>
+{% endif %}
+
+{% if products %}
+	
+	{% set class = 'col-sm-12' %}
+	<div id="mp-products">
+		<div class="{{ class}}" id="seller-collection">
+			<p><a href="{{ compare}}" id="compare-total" class="default-work">{{ text_compare}}</a></p>
+			<div class="row">
+				<div class="col-md-4">
+				  <div class="btn-group">
+				    <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_list}}"><i class="fa fa-th-list"></i></button>
+				    <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_grid}}"><i class="fa fa-th"></i></button>
+				  </div>
+				</div>
+				<div class="col-md-2 text-right">
+				  <label class="control-label" for="input-sort">{{ text_sort}}</label>
+				</div>
+				<div class="col-md-3 text-right">
+				  <select id="input-sort" class="form-control col-sm-3">
+				    {% for sorts in sorts %}
+				    {% if sorts['value'] == sort ~ '-' ~ order %}
+				    <option value="{{ sorts['href']}}" selected="selected">{{ sorts['text']}}</option>
+				    {% else %}
+				    <option value="{{ sorts['href']}}">{{ sorts['text']}}</option>
+				    {% endif %}
+				    {% endif %}
+				  </select>
+				</div>
+				<div class="col-md-1 text-right">
+				  <label class="control-label" for="input-limit">{{ text_limit}}</label>
+				</div>
+				<div class="col-md-2 text-right">
+				  <select id="input-limit" class="form-control">
+				    {% for limits in limits  %}
+				    {% if limits['value'] == limit %}
+				    <option value="{{ limits['href']}}" selected="selected">{{ limits['text']}}</option>
+				    {% else %}
+				    <option value="{{ limits['href']}}">{{ limits['text']}}</option>
+				    {% endif %}
+				    {% endif %}
+				  </select>
+				</div>
+			</div>
+			<br />
+
+			<div class="row">
+				{% for product in products %}
+				<div class="product-layout product-list col-xs-12">
+				  <div class="product-block item-default">
+				  
+
+<?php 
+$load = $this->registry->get("load");
+$language = $load->language("module/themecontrol");
+$text_sale = $language['text_sale'];
+$ourl = $this->registry->get('url'); 
+$objlang = $this->registry->get('language'); 
+}}
+<style type="text/css">
+  .image {
+    max-height: 200px;
+    max-width: 200px;
+  }
+  .block-img {
+    float: left;
+  }
+</style>
+<div class="product-block item-default" itemtype="http://schema.org/Product" itemscope> 
+  <div class="block-img text-center">
+      <?php if ($product['thumb']) {    }}
+        
+        <div class="image">
+          <?php if( $product['special'] ) {   }}
+            <span class="product-label sale"><span class="product-label-special">{{ objlang->get('text_sale')}}</span></span>
+          {% endif %}
+          <a class="img" itemprop="url" title="{{ product['name']}}" href="{{ product['href']}}">
+            <img class="img-responsive" itemprop="image" src="{{ product['thumb']}}" title="{{ product['name']}}" alt="{{ product['name']}}" />
+          </a>
+        </div>
+      {% endif %}
+    
+    </div>
+           
+    <div class="product-meta">      
+      <div class="top">
+         <h3 class="name" itemprop="name"><a href="{{ product['href']}}">{{ product['name']}}</a></h3>
+           <?php if ( isset($product['rating']) ) { }}
+          <div class="rating">
+            <?php for ($is = 1; $is <= 5; $is++) { }}
+            <?php if ($product['rating'] < $is) { }}
+            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+            {% else %}
+            <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i>
+            </span>
+            {% endif %}
+            {% endif %}
+          </div>
+        {% endif %}
+      
+        {% if product['price'] %}
+        <div class="price" itemtype="http://schema.org/Offer" itemscope itemprop="offers">
+          <?php if (!$product['special']) {  }}
+            <span class="price-new">{{ product['price']}}</span>
+            <?php if( preg_match( '#(\d+).?(\d+)#',  $product['price'], $p ) ) { }} 
+            <meta content="{{ p[0]}}" itemprop="price">
+            {% endif %}
+          {% else %}
+            <span class="price-new">{{ product['special']}}</span>
+            <span class="price-old">{{ product['price']}}</span> 
+            <?php if( preg_match( '#(\d+).?(\d+)#',  $product['special'], $p ) ) { }} 
+            <meta content="{{ p[0]}}" itemprop="price">
+            {% endif %}
+
+          {% endif %}
+          <meta content="<?php // echo $this->currency->getCode()}}" itemprop="priceCurrency">
+        </div>
+        {% endif %}    
+          <?php if( isset($product['description']) ){ }} 
+      <p class="description" itemprop="description">{{ utf8_substr( strip_tags($product['description']),0,220)}}...</p>
+      {% endif %}     
+    
+      </div>
+
+
+
+
+
+
+      <div class="bottom">
+        <div class="action">
+          <?php if( !isset($listingConfig['catalog_mode']) || !$listingConfig['catalog_mode'] ) { }}
+          <div class="cart">            
+            <button data-loading-text="Loading..." class="btn btn-dark btn-md" type="button" onclick="cart.addcart('{{ product['product_id']}}');">
+              <i class="md md-add-shopping-cart"></i> 
+              <span class="">{{ objlang->get('button_cart')}}</span>
+            </button>
+          </div>
+         {% endif %}
+            <div class="wishlist">
+                <button class="btn btn-dark btn-md " type="button" title="{{ objlang->get("button_wishlist")}}" onclick="wishlist.addwishlist('{{ product['product_id']}}');"><i class="fa fa-heart"></i><span class="">{{ objlang->get('button_wishlist')}}</span></button> 
+              </div>      
+              
+              <div class="compare">     
+                <button class="btn btn-dark btn-md" type="button" title="{{ objlang->get("button_compare")}}" onclick="compare.addcompare('{{ product['product_id']}}');"><i class="fa fa-refresh"></i><span class="">{{ objlang->get('button_compare')}}</span></button> 
+              </div>  
+               <!-- zoom image-->
+                <?php if( isset($categoryPzoom) && $categoryPzoom ) { $zimage = str_replace( "cache/","", preg_replace("#-\d+x\d+#", "",  $product['thumb'] ));  }}
+                <div class="zoom ">
+                  <a href="{{ zimage}}" class="product-zoom btn btn-dark btn-md" title="{{ product['name']}}">
+                  <i class="fa fa-search-plus"></i>
+                  <span>
+                  {{ objlang->get('zoom')}}</span>
+                  </a>
+                </div>
+                {% endif %}   
+                <?php if ( isset($quickview) && $quickview ) { }}
+              <p class="quickview space-margin-tb-10">
+                 <a class="iframe-link" href="{{ ourl->link('themecontrol/product','product_id='.$product['product_id'])}}" title="{{ objlang->get('quick_view')}}">
+                <span>{{ objlang->get('quick_view')}}</span>
+              </a>
+              </p>
+              {% endif %}
+
+        </div>
+    </div>
+
+
+
+
+
+    
+  </div>  
+</div>
+
+
+
+
+
+				  </div>
+				</div>
+				{% endif %}
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6 text-left">{{ pagination}}</div>
+				<div class="col-sm-6 text-right">{{ results}}</div>
+			</div>
+		</div>
+	</div>
+{% else %}
+
+      <div class="row">
+        <div class="col-sm-3">
+          <ul>
+            {% for category in categories %}
+            <li><a href="{{ category['href']}}">{{ category['name']}}</a></li>
+            <ul>
+            	{% for child in category['children'] %}            		
+            		<li><a href="{{ child['href']}}">{{ child['name']}}</a></li>
+            	{% endif %} 
+            </ul>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+{% endif %}
+
+{% if not categories and not products %}
+	<p>{{ text_empty}}</p>
+{% endif %}
+

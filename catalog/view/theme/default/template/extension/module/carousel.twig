@@ -1,0 +1,43 @@
+<!--
+<div class="swiper-viewport">
+  <div id="carousel{{ module }}" class="swiper-container">
+    <div class="swiper-wrapper">{% for banner in banners %}
+      <div class="swiper-slide text-center">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />{% endif %}</div>
+      {% endfor %}</div>
+  </div>
+  <div class="swiper-pagination carousel{{ module }}"></div>
+  <div class="swiper-pager">
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+</div>
+-->
+
+<div class="col-xs-12 text-center" style="background-color: white; margin-bottom: 20px;">
+  {% for banner in banners %}
+  <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2" style="padding: 0px; margin-bottom: 30px;">
+    {% if banner.link %}
+      <a href="{{ banner.link }}">
+        <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive center-block" />
+        {# {{ banner.title }} #}
+      </a>
+    {% else %}
+      <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive center-block" />
+      {# <h4>{{ banner.title }}</h4> #}
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<script type="text/javascript"><!--
+$('#carousel{{ module }}').swiper({
+	mode: 'horizontal',
+	slidesPerView: 5,
+	pagination: '.carousel{{ module }}',
+	paginationClickable: true,
+	nextButton: '.swiper-button-next',
+    prevButton: '.swiper-button-prev',
+	autoplay: 2500,
+	loop: true
+});
+--></script>

@@ -1,0 +1,18 @@
+<form action="{{ action }}" method="post">
+
+  <!--台銀刷卡所需資料 -->
+  <input type="hidden" name="MerchantID" value="{{ MerchantID }}" />
+  <input type="hidden" name="lidm" value="{{ lidm }}" />  
+  <input type="hidden" name="TerminalID" value="{{ TerminalID }}" />  
+  <input type="hidden" name="MerchantName" value="{{ MerchantName }}" />    
+  <input type="hidden" name="merID" value="{{ merID }}" />  
+  <input type="hidden" name="purchAmt" value="{{ purchAmt }}" />  
+  <input type="hidden" name="AutoCap" value="{{ AutoCap }}" />  
+  <input type="hidden" name="AuthResURL" value="{{ AuthResURL }}" />  
+  
+  <div class="buttons">
+    <div class="pull-right">
+      <input type="submit" value="{{ button_confirm }}" class="btn btn-primary" />
+    </div>
+  </div>
+</form>

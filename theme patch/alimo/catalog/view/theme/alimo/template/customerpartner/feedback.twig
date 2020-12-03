@@ -1,0 +1,47 @@
+{% if feedbacks %}
+	{% for feedback in feedbacks %}
+
+	<div class="review-container">
+		<div class="review-detail-container">
+		    <div class="review-container-left-panel">
+		      <div class="reviewer-name">
+		        {{ feedback['nickname']}}
+		      </div>
+		      <div class="review-date">
+		        {{ feedback['createdate']}}
+		      </div>
+		    </div>
+	    	<div class="review-border"></div>
+		    <div class="review-container-right-panel">
+		      <div class="review-content">
+		        {{ feedback['review']}}
+		      </div>
+		    </div>
+		</div>
+	    <div class="review-seller-rating">
+				{% if review_fields is defined and review_fields %}
+					{% for review_field in review_fields %}
+						<div class="rating-price actual-seller-rating">
+							<div class="text-container">
+						    {{ review_field['field_name']}}
+						  </div>
+							<div class="rating-container">
+								{% for i in 1..5 %}
+									{% if i <= feedback['review_attributes'][review_field['field_id']] %}
+										<span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+									{% else %}
+											<span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+									{% endif %}
+								{% endfor %}
+							</div>
+						</div>
+					<?php }
+				{% endif %}
+	    </div>
+  	</div>
+	{% endif %}
+	<div class="text-right">{{ results}}</div>
+
+{% else %}
+	<div class="mp-no-location-found text-danger">{{ text_no_feedbacks}}</div>
+{% endif %}

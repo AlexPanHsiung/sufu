@@ -1,0 +1,390 @@
+{{ header }}
+<style>
+.help {
+	color: #999;
+	font-size: 10px;
+	font-weight: normal;
+	font-family: Verdana, Geneva, sans-serif;
+	display: block;
+}
+</style>
+{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  
+  <div class="container-fluid">
+  {% if unconverted_affiliates or error_no_default or error_warning %}
+    
+  <div class="alert alert-danger" id="warning"><i class="fa fa-exclamation-circle"></i>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  	{% if unconverted_affiliates %}
+  	<div id="unconverted_div">
+  	{{ text_unconverted_affiliates }} - <strong>{{ unconverted_affiliates }}</strong><br />
+  	{% if error_no_default_unconverted %}
+  			{{ error_no_default_unconverted }}
+  		{% else %}
+  		<a id="convert_affiliates">{{ text_convert_affiliates }}</a>
+	{% endif %}
+  	</div>
+	{% endif %}
+	{% if not error_no_default_unconverted or error_no_default %} {{ error_no_default }} <br />{% endif %}
+  	{% if error_warning %} {{ error_warning }} {% endif %}
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+          <ul class="nav nav-tabs">
+            <li{% if config.status %} class="active"{% endif %}><a href="#tab-schemes" data-toggle="tab">{{ tab_schemes }}</a></li>		  
+            <li{% if not config.status %} class="active"{% endif %}><a href="#tab-general-settings" data-toggle="tab">{{ tab_general_settings }}</a></li>
+          </ul>
+          <div class="tab-content">
+			<div class="tab-pane{% if config.status %} active{% endif %}" id="tab-schemes">			
+				<div class="text-right" style="padding-bottom:10px"><a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+				</div>		
+		
+{% if not schemes %}
+<div class="alert alert-info">{{ text_no_results }}</div>    	
+{% else %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+            	  <td class="text-left">{{ column_name }}</td>
+            	  <td class="text-left">{{ column_commission }}</td>
+            	  <td class="text0left">{{ column_code }}</td>   
+                  <td class="text-right">{{ column_action }}</td>
+				</tr>
+			  </thead>
+			  <tbody>
+            {% for s in schemes %}
+              <tr>
+				<td class="text-left">
+				{% if s.is_default %}
+					<div class="pull-right"><small>{{ text_default }}</small></div>
+				{% endif %}
+				<div>{{ s['name'] }}</div>
+				<div class="help">{{ s['description'] }}</div>
+				{% if s.user_total %}
+				<div>
+					<a class="show_usage_link">{{ text_show_usage }} ({{ s['user_total'] }})</a>
+					<a class="hide_usage_link" style="display:none;">{{ text_hide }}</a>
+					<div class="usage" style="display:none">
+					{% for _k, _v in user_types %}
+						{% if s.user_count[_k] %}
+						<input type="checkbox" value="{{ _v }}" />{{ user_types_lng[_k] }} :  <strong>{{ s.user_count[_k] }}</strong><br />				
+					{% endif %}
+					{% endfor %}	
+						{% if num_schemes > 1 %}
+							{{ text_move_users }}<br />
+						<select class="move_select_scheme">
+							<option value="">{{ text_select_scheme }} ...</option>
+							{% for s_opt in s_opts %}
+							<option value="{{ s_opt.id }}">{{ s_opt.name }}</option>
+							{% endfor %}
+						</select><br />
+						<input type="hidden" class="this_scheme_id" value="{{ s['id'] }}" />
+						<input type="hidden" class="move_id_input" value="" />
+						<div class="move_name_div" style="display:none;">
+							<input type="text" class="move_name_input" size="20" value="" readonly="readonly" />
+						</div>
+						<input type="button" class="move_button" id="mb_{{ s['id'] }}" value="{{ text_move }}" />
+						{% endif %}
+					</div>
+				</div>
+				{% endif %}
+				</td>
+				<td class="text-left">
+					{{ s['max_levels'] }}-{{ entry_tier }}, {% if s.commission_type == 'fixed' %} {{ text_amount }} {% else %} {{ text_percent }} {% endif %}<hr />
+					{{ s['commissions'] }}
+				</td>
+				<td class="text-left">
+					<input type="text" size="20" value="{{ s['signup_code'] }}" readonly="readonly" /><br />
+					<small>add </small><strong>&amp;mta={{ s['signup_code'] }}</strong><small> to any shop URL&#039;s query part to get new affiliate signed under this scheme</small>
+				</td>
+				<td class="text-left">
+					<a href="javascript:;" class="copy_scheme_link">{{ text_copy_scheme }}</a>
+					<div style="padding-left:50px;display:none;">
+					{{ entry_new_name }}:<br />
+						<input type="hidden" class="this_scheme_id" value="{{ s['id'] }}" />
+						<input type="text" class="new_scheme_name" value="" size="30" /><br />
+						<button type="button" class="btn btn-default copy_scheme_button">{{ text_copy_scheme }}</button>
+					</div><br />
+					<a href="{{ s['edit_link']['href'] }}">{{ s['edit_link']['text'] }}</a>
+					{% if not s.is_default %}
+						<br />
+						<a class="delete_link" id="dl_{{ s['id'] }}">{{ button_delete }}</a>
+					{% endif %}
+				</td>
+			</tr>
+            {% endfor %}		  
+			  </tbody>
+			</table>
+		  </div>		   
+{% endif %}
+			</div>
+			<div class="tab-pane{% if not config.status %} active{% endif %} form-horizontal" id="tab-general-settings">
+			  <div class="text-right" style="padding-bottom:15px">
+				<button type="button" class="btn btn-primary" id="button_save_settings" data-toggle="tooltip" data-loading-text="{{ text_loading }}" title="{{ button_save_settings }}"><i class="fa fa-save"></i></button>
+			  </div>			
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-settings-status">{{ column_settings_status }}</label>
+                <div class="col-sm-10">
+					<select name="mta_ypx_status" id="input-settings-status">
+						<option value="0">{{ text_disabled }}</option>
+						<option value="1"{%if config.status %} selected="selected"{% endif %}>{{ text_enabled }}</option>
+					</select>
+				</div>
+			  </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-settings-tracking">{{ column_settings_tracking }}</label>
+                <div class="col-sm-10">
+					<select name="mta_ypx_no_aff_in_cust_acc" onchange="javascript:if($(this).val() == '1') {$('[name=\'mta_ypx_db_perm\']').val('0');};" class="form-control" id="input-settings-tracking">
+						<option value="0"{% if not config.no_aff_in_cust_acc %} selected="selected"{% endif %}>{{ text_settings_tracking_permanent }}</option>
+						<option value="1"{% if config.no_aff_in_cust_acc %} selected="selected"{% endif %}>{{ text_settings_tracking_cookies }}</option>
+					</select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-settings-db-permit">{{ column_settings_db_permit }}</label>
+                <div class="col-sm-10">
+					<select name="mta_ypx_db_perm" onchange="javascript:if($(this).val() == '1') {$('[name=\'mta_ypx_no_aff_in_cust_acc\']').val('0');};" class="form-control" id="input-settings-db-permit">
+						<option value="0"{% if not config.db_perm %} selected="selected"{% endif %}>{{ text_yes }}</option>
+						<option value="1"{% if config.db_perm %} selected="selected"{% endif %}>{{ text_no }}</option>				  
+					</select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-container="#tab-general-settings" title="{{ help_settings_expire }}">{{ column_settings_expire }}</span></label>
+                <div class="col-sm-10">
+			<input type="text" name="mta_ypx_expire" class="form-control" id="input-settings-expire" value="{{ config.expire }}" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-container="#tab-general-settings" title="{{ help_settings_no_shipping }}">{{ column_settings_no_shipping }}</span></label>
+                <div class="col-sm-10">
+				  <label class="radio-inline">
+					<input type="radio" name="mta_ypx_no_shipping" value="0"{% if not config.no_shipping %} checked="checked"{% endif %} /> {{ text_settings_no_shipping_default }}
+				  </label>
+				  <label class="radio-inline">
+					<input type="radio" name="mta_ypx_no_shipping" value="any"{% if config.no_shipping and config.no_shipping == 'any' %} checked="checked"{% endif %} /> {{ text_settings_no_shipping_any }}
+				  </label>
+				  <label class="radio-inline">
+					<input type="radio" name="mta_ypx_no_shipping" value="subtotal"{% if config.no_shipping and config.no_shipping == 'subtotal' %} checked="checked"{% endif %} /> {{ text_settings_no_shipping_subtotal }}
+				  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-container="#tab-general-settings" title="{{ help_settings_autoadd_statuses }}">{{ column_settings_autoadd_statuses }}</span></label>
+                <div class="col-sm-10">
+				  {% for _i, _order_status in order_statuses %}
+				  <div class="checkbox">
+				    <label>
+					  <input type="checkbox" name="mta_ypx_autoadd_statuses[{{ _i }}]" value="{{ _order_status['order_status_id'] }}"{% if _order_status.order_status_id in autoadd_statuses %} checked="checked"{% endif %} />{{ _order_status.name }}<br />
+					</label>
+			      </div>
+				{% endfor %}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-settings-explicit-default"><span data-toggle="tooltip" data-container="#tab-general-settings" title="{{ help_settings_explicit_default }}">{{ column_settings_explicit_default }}</span></label>
+                <div class="col-sm-10">
+					<select name="mta_ypx_explicit_default" class="form-control" id="input-settings-explicit-default">
+						<option value="0">{{ text_no }}</option>
+						<option value="1"{% if config.explicit_default %} selected="selected"{% endif %}>{{ text_yes }}</option>
+					</select>					
+                </div>
+              </div>			  
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-container="#tab-general-settings" title="{{ help_settings_llaff_priority }}">{{ column_settings_llaff_priority }}</span></label>
+                <div class="col-sm-10">
+				  <label class="radio-inline">
+					<input type="radio" name="mta_ypx_llaff_priority" value="0"{% if not config.llaff_priority %} checked="checked"{% endif %} /> {{ text_settings_llaff_higher }}
+				  </label>
+				  <label class="radio-inline">
+					<input type="radio" name="mta_ypx_llaff_priority" value="1"{% if config.llaff_priority %} checked="checked"{% endif %} /> {{ text_settings_llaff_lower }}
+				  </label>
+                </div>
+              </div>			  
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-settings-recurring">{{ column_settings_recurring }}</label>
+                <div class="col-sm-10">
+					<select name="mta_ypx_pay_recur" class="form-control" id="input-settings-recurring">
+						<option value="0">{{ text_no }}</option>
+						<option value="1"{% if config.pay_recur %} selected="selected"{% endif %}>{{ text_yes }}</option>
+					</select>
+                </div>
+              </div>			  
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><span data-toggle="tooltip" data-container="#tab-general-settings" title="{{ help_settings_downline }}">{{ column_settings_downline }}</span></label>
+                <div class="col-sm-10">	
+					<div class="input-group">				
+					<select name="mta_ypx_downline" id="downline_select" class="form-control">
+					  <option value="0"{% if not config.downline %} selected="selected"{% endif %}>{{ text_no }}</option>
+					  <option value="1"{% if config.downline %} selected="selected"{% endif %}>{{ text_yes }}</option>				
+					</select><div class="input-group-addon">{{ text_show_downline }}</div></div>
+					<div class="input-group">
+					<select name="mta_ypx_downline_email" class="form-control downline_item">
+					  <option value="0"{% if not config.downline_email %} selected="selected"{% endif %}>{{ text_no }}</option>
+					  <option value="1"{% if config.downline_email %} selected="selected"{% endif %}>{{ text_yes }}</option>				
+					</select><div class="input-group-addon">{{ text_show_downline_email }}</div></div>
+					<div class="input-group">
+					<select name="mta_ypx_downline_phone" class="form-control downline_item">
+					  <option value="0"{% if not config.downline_phone %} selected="selected"{% endif %}>{{ text_no }}</option>
+					  <option value="1"{% if config.downline_phone %} selected="selected"{% endif %}>{{ text_yes }}</option>				
+					</select><div class="input-group-addon">{{ text_show_downline_phone }}</div></div>
+					<div class="input-group">
+					<select name="mta_ypx_downline_earnings" class="form-control downline_item">
+					  <option value="0"{% if not config.downline_earnings %} selected="selected"{% endif %}>{{ text_no }}</option>
+					  <option value="1"{% if config.downline_earnings %} selected="selected"{% endif %}>{{ text_yes }}</option>				
+					</select><div class="input-group-addon">{{ text_show_downline_earnings }}</div>
+				  </div>
+                </div>
+              </div>			  
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-downline-limit"><span data-toggle="tooltip" data-container="#tab-general-settings" title="{{ help_settings_downline_limit }}">{{ column_settings_downline_limit }}</span></label>
+                <div class="col-sm-10">	
+					<input type="text" name="mta_ypx_downline_limit" size="3" value="{% if config.downline_limit %} {{ config.downline_limit }}{% endif %}" onchange="javascript:if($('[name=\'mta_ypx_downline_limit\']').val() != '' && !/^\d+$/.test($('[name=\'mta_ypx_downline_limit\']').val())) {$('#error_downline_limit').addClass('text-danger').show(); $('[name=\'mta_ypx_downline_limit\']').val('');} else {$('#error_downline_limit').removeClass('text-danger').hide();};" class="form-control" id="input-downline-limit" />
+					<div style="display:none;" id="error_downline_limit">{{ error_downline_limit }}</div>
+				</div>
+			  </div>			  
+			  <div><a href="{{ link_downline }}" target="_blank">{{ text_link_downline }}</a></div>			
+			</div>
+		  </div>
+		 </div>
+		</div>
+<script type="text/javascript"><!--
+	
+$(document).ready(function () { 
+
+	var _all_fixed = {{ all_fixed }};
+
+	var _cb = function(r) {
+		//standard response callback
+		r = parseInt(r);
+		if(r) {
+			alert('{{ text_success_esqq }}');
+			document.location.reload();
+		} else {
+			alert('{{ error_invalid_request_jsstr }}');
+		}		
+	}
+	
+	$('.show_usage_link').on('click', function() {
+		$(this).hide();
+		$($(this).parent().find('.usage')).show();
+		$($(this).parent().find('.hide_usage_link')).show();
+	});
+	
+	$('.hide_usage_link').on('click', function() {
+		$(this).hide();
+		$($(this).parent().find('.usage')).hide();
+		$($(this).parent().find('.show_usage_link')).show();
+	});
+	
+	$('#convert_affiliates').on('click', function() {
+		$.get(document.location.href.replace('mta/mta', 'mta/mta/convert_affiliates'), function(r) {
+			r = parseInt(r);
+			if(r) {
+				$('#unconverted_div').hide();
+				$('#success').text('{{ text_convert_success_jsstr }}');
+				$('#success').parent().show();
+				$('#warning').hide();
+			} else {
+				alert('{{ error_invalid_request_jsstr }}');
+			}
+		});		
+	});
+	
+	$('.delete_link').on('click', function() {
+		if(!confirm('{{ text_delete_scheme_warning_jsstr }}')) return;
+		var _id = $(this).attr('id');
+		_id = _id.split('_')[1];
+		$.post(document.location.href.replace('mta/mta', 'mta/mta/delete'), {'id' : _id, 'really_do_delete' : (parseInt(_id) * 3 + 517)}, _cb);
+	});
+	
+	$('.copy_scheme_link').on('click', function() {
+		$(this).parent().find('div:first').toggle();
+	});
+	
+	$('.copy_scheme_button').on('click', function() {
+		var _name = $(this).parent().find('.new_scheme_name').val();
+		if(!_name) return;
+		var _id = $(this).parent().find('.this_scheme_id').val();
+		$.post(document.location.href.replace('mta/mta', 'mta/mta/copy'), {'id' : _id, 'name' : _name}, _cb);
+	});
+	
+	$('.move_button').on('click', function() {
+		var _new_id = $(this).parent().find('.move_id_input').val();
+		if(!_new_id) return;
+		_types = [];
+		$($(this).parent().find('input:checked')).each(function() {
+			_types.push($(this).val());
+		});
+		if(!_types.length) return;
+		$.post(document.location.href.replace('mta/mta', 'mta/mta_set_scheme/move'), {
+			'from' : $(this).attr('id').split('_')[1],
+			'to' : _new_id,
+			'types' : _types.join(',')		
+		}, _cb);		
+	});
+	
+	$('.move_select_scheme').on('change', function() {
+		var _id	= $(this).find('option:selected').val();
+		if(_id == $($(this).parent().find('.this_scheme_id')).val()) {
+			$(this).find('option[value="'+_id+'"]').prop('selected', false);
+			$(this).find('option[value="0"]').prop('selected', true);
+			return;
+		}
+		var _name = $(this).find('option:selected').text();
+		$(this).parent().find('.move_id_input').val(_id);
+		$(this).parent().find('.move_name_input').val(_id ? _name : '');
+		$(this).parent().find('.move_name_div').show();
+		return true;
+	});
+	
+	var _saving_settings = false;
+	$('#button_save_settings').on('click', function() {
+		if(_saving_settings) return;
+		_saving_settings = true;
+		if($('input[name="mta_ypx_expire"]').val().length < 1) $('input[name="mta_ypx_expire"]').val('0');
+		if(!/^\d+$/.test($('input[name="mta_ypx_expire"]').val())) $('input[name="mta_ypx_expire"]').val('1000');
+		$('#button_save_settings').button('loading');	
+		var _data = {};
+		$('input[name^="mta_ypx_"]:checked').each(function() {
+			_data[$(this).attr('name')] = $(this).attr('value');
+		});
+		$('select[name^="mta_ypx_"]').each(function() {
+			_data[$(this).attr('name')] = $(this).find('option:selected').val();
+		});		
+		_data['mta_ypx_downline_limit'] = $('[name="mta_ypx_downline_limit"]').val();
+		_data['mta_ypx_expire'] = $('[name="mta_ypx_expire"]').val();
+		$.post(document.location.href.replace('mta/mta', 'mta/mta/save_settings'), _data, function() {
+			_saving_settings = false;
+			$('#button_save_settings').button('reset');
+		});	
+	});
+	
+	var _check_downline = function() {
+		if($('#downline_select').val() == '0') {
+			$('.downline_item').val('0');
+			$('.downline_item').attr('disabled', true);
+		} else {
+			$('.downline_item').attr('disabled', false);
+		}
+	}
+	
+	$('#downline_select').on('change', _check_downline);
+	_check_downline();
+});
+
+//--></script>
+{{ footer }}</div>				

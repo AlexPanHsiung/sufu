@@ -1,0 +1,252 @@
+{{ header }}
+<style>
+.help {
+	color: #999;
+	font-size: 10px;
+	font-weight: normal;
+	font-family: Verdana, Geneva, sans-serif;
+	display: block;
+}
+</style>
+{{ column_left }}<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-order-commission" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <span id="error-warning">{{ error_warning }}</span>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ text_success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ heading_title }}</h3>
+      </div>
+      <div class="panel-body">
+		<form action="{{ action }}" method="post" id="form-order-commission">
+			<input type="hidden" name="save_commission" value="1" />
+			<input type="hidden" id="added_ids" value="{{ added_ids }}" />
+			<div>
+				<div>
+					<button type="button" class="btn btn-default" rel="#affiliate_dt_overlay_div" id="affiliate_dt_overlay_open">{{ text_add_affiliate }}</button>
+				</div>
+				<div><a href="{{ link_order }}">{{ text_order }}</a></div>      
+				<div>
+					<input type="radio" name="do_add" value="0"{% if not do_add %} checked="checked"{% endif %} />{{ text_no_do_add }}<br />
+					<input type="radio" name="do_add" value="1"{% if do_add %} checked="checked"{% endif %} />{{ text_yes_do_add }}
+				</div>
+			</div>
+			<h3>{{ heading_edit_commissions }}</h3>
+			<div class="table-responsive">			
+				<table class="table table-bordered table-hover" id="ctable">
+					<thead>
+						<tr>
+							<td>{{ column_affiliate }}</td>
+							<td>{{ column_product }}</td>
+							<td>{{ column_commission }}</td>
+							<td>&nbsp;</td>
+						</tr>
+					</thead>
+					<tbody>
+{% for acommissions in commissions %}
+		{% for _i, _product in acommissions %}
+<tr>
+	<td><a href="{{ _product['link_affiliate'] }}" target="_blank">{{ _product['affiliate_name'] }}</a>
+	{% for _k, _v in _product %}
+		{% if _k != 'commission' and _k != 'order_product_id' %}
+	<input type="hidden" name="commissions[{{ _product['affiliate_id'] }}][{{ _i }}][{{ _k }}]" value="{{ _v }}" />
+	{% endif %}
+	{% endfor %}
+	</td>
+	<td>
+		<select name="commissions[{{ _product['affiliate_id'] }}][{{ _i }}][order_product_id]" class="form-control">
+		{% for opid, _op in order_products %}
+		<option value="{{ opid }}"{% if _product['order_product_id'] == opid %} selected="selected"{% endif %}>{{ _op['name'] }} ({{ _op['model'] }}) x {{ _op['quantity'] }}</option>
+		{% endfor %}
+		</select>		
+	</td>	
+	<td><input type="text" class="commission-amount form-control" name="commissions[{{ _product['affiliate_id'] }}][{{ _i }}][commission]" value="{{ _product['commission'] }}" size="8" /></td>
+	<td><button type="button" class="btn btn-default" onclick="javascript:$(this).parent().parent().remove();">{{ text_remove }}</button></td>
+</tr>
+	{% endfor %}
+{% endfor %}
+			</tbody>
+          </table>
+		  </div>
+{% if added %}
+<h3>{{ heading_readonly_commissions }}</h3>		
+		<div class="table-responsive">
+          <table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<td>{{ column_affiliate }}</td>
+					<td>{{ column_product }}</td>
+					<td>{{ column_commission }}</td>
+					<td>&nbsp;</td>
+				</tr>
+			</thead>
+			<tbody>
+{% for a in added %}
+<tr>
+	<td><a href="{{ a[0]['link_affiliate'] }}" target="_blank">{{ a[0]['affiliate_name'] }}</a></td>
+	<td>
+{% for _product in a %}
+		{{ _product['product_name'] }}{% if _product['product_model'] %} ({{ _product['product_model'] }}){% endif %}{% if _product['quantity'] %} x {{ _product['quantity'] }}{% endif %}
+{% endfor %}
+	</td>
+	<td>{{ a[0]['commission_total'] }}</td>
+	<td><span id="commission{{ a[0]['affiliate_id'] }}"><button type="button" class="btn btn-default commission-remove" data-loading-text="{{ text_loading }}" id="commission-remove-{{ a[0]['affiliate_id'] }}">{{ text_commission_remove }}</button></span></td>
+</tr>	
+{% endfor %}
+</table>
+</div>
+<div class="help">{{ help_readonly_commissions }}</span>
+{% endif %}
+</div>
+      </form>
+    </div>
+  </div>
+</div>
+<div style="background-color:#efefef;border:2px solid #ababab;z-index:99999999;display:none;" id="affiliate_dt_overlay_div"><div style="text-align:right;padding-right:5px;"><a class="overlay_close">{{ oy_close }}</a><div style="text-align:center;font-weight:bold;">{{ oy_title }}<hr /></div><div style="height:400px;width:850px;overflow-y:auto;margin:3px;padding:5px;">
+<table cellpadding="0" cellspacing="0" border="0" id="affiliate_dt">
+	<thead>
+		<tr>
+			<th width="5%">{{ oy_id }}</th>
+			<th width="20%">{{ oy_name }}</th>
+			<th width="20%">{{ oy_email }}</th>
+			<th width="20%">{{ oy_scheme }}</th>
+			<th width="5%">{{ oy_level }}</th>
+			<th width="10%">{{ oy_balance }}</th>			
+			<th width="20%">{{ oy_date_added }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td colspan="7" class="dataTables_empty">{{ oy_loading }}</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>{{ oy_id }}</th>
+			<th>{{ oy_name }}</th>
+			<th>{{ oy_email }}</th>
+			<th>{{ oy_scheme }}</th>
+			<th>{{ oy_level }}</th>
+			<th>{{ oy_balance }}</th>			
+			<th>{{ oy_date_added }}</th>
+		</tr>
+	</tfoot>
+</table>
+</div>
+<div style="text-align:right;padding-right:5px;"><hr /><a class="overlay_close">{{ oy_close }}</a></div>
+</div></div>
+<script type="text/javascript" src="view/javascript/jquery.migrate.min.js"></script>
+<script type="text/javascript" src="view/javascript/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="view/javascript/jquery.tools.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+var _aff_sizes = {{ aff_sizes }};
+var _link_affiliate_tpl = '{{ link_affiliate_tpl }}';
+var _tr_tpl = '<tr><td><a href="|||link|||" target="_blank">|||name|||</a><input type="hidden" name="commissions[|||id|||][|||i|||][affiliate_id]" value="|||id|||" /></td><td><select name="commissions[|||id|||][|||i|||][order_product_id]" class="form-control">';
+		{% for opid, _op in order_products %}
+_tr_tpl += ' <option value="{{ opid }}">{{ _op.name_cs }} ({{ _op['model'] }}) x {{ _op['quantity'] }}</option>';
+		{% endfor %}
+_tr_tpl += '</select></td><td><input type="text" class="commission-amount form-control" name="commissions[|||id|||][|||i|||][commission]" value="" size="8" placeholder="{{ column_commission }}" /></td><td><button type="button" class="btn btn-default" onclick="javascript:$(this).parent().parent().remove();">{{ text_remove }}</button></td></tr>';
+
+    $('#affiliate_dt').dataTable( {
+        'bProcessing': true,
+        'bServerSide': true,
+        'sAjaxSource': '{{ link_datatable }}',
+        'sServerMethod' : 'POST',
+        'sPaginationType' : 'full_numbers',
+        'iDisplayLength' : 10,
+        'aoColumns': [
+        		{ 'mDataProp': 'id', 'bSearchable' : false, 'bSortable' : false },
+            { 'mDataProp': 'name' },
+            { 'mDataProp': 'email' },
+            { 'mDataProp': 'scheme', 'bSearchable' : false, 'bSortable' : false },            
+            { 'mDataProp': 'level', 'bSearchable' : false},
+            { 'mDataProp': 'balance', 'bSearchable' : false, 'bSortable' : false},
+            { 'mDataProp': 'date_added', 'bSearchable' : false  }
+        ],
+		
+    	'fnServerParams': function (aoData) {
+			if($('#added_ids').val().length < 1) return;				
+      		aoData.push({'name' : 'filter_ids', 'value' : 'exclude'});
+      		aoData.push({'name' : 'ids', 'value' : $('#added_ids').val()});
+    	},
+
+        'fnDrawCallback': function() {            
+            $('.affiliate_dt_row').css({'cursor' : 'pointer'});
+            $('.affiliate_dt_row').click( function () {
+            	$('#affiliate_dt_overlay_open').overlay().close();            	
+				var _id = $(this).attr('id').split('-')[1];
+				var _i = 'a'+Math.round(Math.random() * 1000000);
+				var _name = $($(this).find('td')[1]).text();
+				var _link = _link_affiliate_tpl.replace(/AFFID/g, _id);
+console.log(_tr_tpl, _name);//tmp				
+				var _tpl = _tr_tpl.replace(/\|\|\|id\|\|\|/g, _id);
+				_tpl = _tpl.replace(/\|\|\|link\|\|\|/g, _link);
+				_tpl = _tpl.replace(/\|\|\|name\|\|\|/g, _name);
+				_tpl = _tpl.replace(/\|\|\|i\|\|\|/g, _i);
+				$('#ctable').append(_tpl);
+			});
+        }        
+    });   
+    
+$('#affiliate_dt_overlay_open').overlay({
+   	mask: {
+		color: '#efefef',
+        loadSpeed: 200,
+        zIndex: '999999959',
+        opacity: 0.9
+    },
+    top: 10,
+    closeOnClick: false
+});
+
+$('.overlay_close').on('click', function() {
+	$('#affiliate_dt_overlay_open').overlay().close();
+});
+
+
+$('.commission-remove').on('click', function() {
+	var _this = $(this);
+	var _id = $(this).attr('id').replace(/[^\d]+/g, '');
+	$.ajax({
+		type: 'POST',
+		url: 'index.php?route=sale/order/removecommission&user_token={{ user_token }}&order_id={{ order_id }}&affiliate_id='+_id,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success').hide();
+			$('.warning').hide();		
+			$(_this).button('loading');
+		},
+		complete: function() {
+			$(_this).button('reset');
+		},			
+		success: function(json) {						
+			if (json['error']) {
+				$('#error-warning').html(json['error']);
+				$('.warning').fadeIn('slow');
+			} else {
+				document.location.reload();			
+			}
+		}
+	});
+});
+});
+</script></div>
+{{ footer }}

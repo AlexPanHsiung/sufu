@@ -1,0 +1,53 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>{{ heading_title }}</h1>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+<div id="legend-div">
+<h3><u>{{ text_legend }}</u></h3>
+<b>{{ text_abbr_te }}</b> - {{ text_te }}<br />
+<b>{{ text_abbr_elm }}</b> - {{ text_elm }}<br />
+</div>
+<ul class="tree">
+	<li>(<a href="javascript:;" rel="{{ aff_id }}" class="load_subs" title="{{ affd_text_expand }}">{{ top_count }}</a>)  <b>{% if not aff_status %}<s title="{{ text_disabled }}">{% endif %}{{ text_shop }}{% if not aff_status %}</s>{% endif %}</b><img src="view/image/loading.gif" class="loading" style="display:none;"/></li>
+</ul>
+	</div>
+  </div>
+ </div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$(document).on('click', '.load_subs', function() {
+		var _p = $(this).parent();
+		var _this = $(this);
+		if($(_p).find('ul').length < 1) {
+			$(_p).find('.loading').show();
+			$.ajax({
+				url: document.location.href.replace('mta/affiliate_downline', 'mta/affiliate_downline/l')+'&affiliate_id='+$(_this).attr('rel'), 
+				dataType: 'json',
+				success: function(_r) {
+					$(_p).append('<ul></ul>');
+					for(var i = 0; i < _r.length; i++) {
+						var _li = '<li>(';
+						if(_r[i].c > 0) _li += '<a href="javascript:;" class="load_subs" rel="'+_r[i].affiliate_id+'"{#  title="{{ affd_text_expand }}"#}>';
+						_li += _r[i].c;
+						if(_r[i].c > 0) _li += '</a>'
+						_li += ') <a href="{{ link }}&customer_id='+_r[i].affiliate_id+'" class="aff_name" target="_blank"'+(_r[i].aff_status ? '' : ' title="{{ text_disabled }}"') + '>'+(_r[i].aff_status ? '' : '<s>')+_r[i].name+(_r[i].aff_status ? '' : '</s>') + '</a> <a href="mailto:'+_r[i].email+'" class="mailto-link">'+_r[i].email+'</a> '+_r[i].telephone+' <span class="help">';
+						_li += '{{ text_abbr_te }}: ' + _r[i].e_te + ' / ' + '{{ text_abbr_elm }}: ' + _r[i].e_elm;
+						_li += '</span> </li>';
+						$(_p).find('ul').append(_li);
+					}
+					$(_p).find('.loading').hide();
+				}
+				});
+		} else {
+			$($(_p).find('ul')[0]).toggle();
+		}
+	});
+}
+);
+</script>
+{{ footer }}

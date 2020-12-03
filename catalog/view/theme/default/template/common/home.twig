@@ -1,0 +1,22 @@
+{{ header }}
+<div id="common-home" class="container">
+  <div class="row">
+  <div class="col-sm-3 hidden-xs">
+    {{ categories }}
+  </div>
+  <div class="col-sm-9">
+    <img title="光量生物科技 純素產品" alt="光量生物科技專門製造純素產品，不僅在OEM(委託代工)、OBM(設計代工)、ODM(自有品牌代工)具有專業的經驗，也包含自有品牌「蔬福良品」的產品製作及銷售。" src="image/catalog/HTML/top.jpg" style="width: 100%">
+  </div>
+    {{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}{{ content_bottom }}</div>
+    {{ column_right }}
+  </div>
+</div>
+{{ footer }}

@@ -1,0 +1,543 @@
+{{ header }}
+<style type="text/css">
+  .banner-container {
+   {% if partner['companybanner'] %}
+      background:url("{{ partner['companybanner']}}") no-repeat scroll center center / 100% 325px rgba(0, 0, 0, 0);
+    {% elseif partner['backgroundcolor'] %}
+      background-color:{{ partner["backgroundcolor"]}};
+      background-image: linear-gradient(to top, #fff, {{ partner["backgroundcolor"]}});
+      background-image: -webkit-gradient(linear, left bottom, left top, from(#FFFFFF), to({{ partner["backgroundcolor"]}}));
+      background-image: -webkit-linear-gradient(top, {{ partner["backgroundcolor"]}},#FFFFFF);
+      background-image:    -moz-linear-gradient(top, {{ partner["backgroundcolor"]}},#FFFFFF);
+      background-image:      -o-linear-gradient(top, {{ partner["backgroundcolor"]}},#FFFFFF);
+      background-image:         linear-gradient(to bottom, {{ partner["backgroundcolor"]}},#FFFFFF);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr={{ partner["backgroundcolor"]}}, endColorstr=#FFFFFFFF);
+      -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr={{ partner["backgroundcolor"]}}, endColorstr=#FFFFFFFF)";
+    {% else %}
+      background: #FFF;
+    {% endif %}
+    /*background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;*/
+    text-align: center;
+    /*top: 5%;*/
+    width: 100%;
+    height: 415px;
+    padding-top: 50px;
+  }
+  .af {
+
+  }
+  a{
+    cursor: pointer;
+  }
+</style>
+<!-- <link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/MP/profile.css"> -->
+{% set class = 'col-sm-12' %}
+<div class="container">
+  <div class="row">
+    <div id="content" class="{{ class}}">
+      <div class="banner-container">
+        <div class="banner-stripe">
+          <div class="company-logo">
+            {% if partner['companylogo'] is defined and partner['companylogo'] %}
+              <img src="{{ partner['companylogo']}}" alt="{{ partner['companyname']}}" class="">
+            {% else %}
+              <div class="block-for-image">
+
+              </div>
+            {% endif %}
+          </div>
+          <div class="seller-location">
+            <h4 class="">
+            {{ text_from}}<span data-toggle="tooltip" title="{{ text_from}}"><i class="fa fa-home"></i></span>
+              <b>{{ partner['country']}}</b>
+            </h4>
+          </div>
+        </div> <!-- banner stripe -->
+        <div class="seller-details-stripe-lower">
+          <div class="detail-container-inner">
+            <div class="profile-pic">
+              <div class="img-div">
+                {% if partner['avatar'] is defined and partner['avatar'] %}
+                  <img src="{{ partner['avatar']}}" alt="{{ partner['firstname']}}">
+                {% else %}
+                  <div class="no-image-div">
+
+                  </div>
+                {% endif %}
+              </div>
+            </div> <!-- profile-pic -->
+            <div class="details">
+              <div class="upper-detail">
+                <h4>
+                  {{ partner['firstname'] ~ ' ' ~ partner['lastname'] }}
+                </h4>
+              </div>
+              <div class="lower-detail">
+                <h4>
+                  {{ text_rating}}
+                </h4>
+                <!-- <br/> -->
+                {% for i in 1..5 %}
+                  {% if i <= feedback_total %}
+                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                  {% else %}
+                      <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div> <!-- details -->
+            <div class="contact-seller">
+              <div class="upper-contact-seller">
+                {% if telephone or customer_id == seller_id %}
+                  <div class="seller-mobile">
+                    <i class="fa fa-phone"></i>
+                    {{ partner['telephone']}}
+                  </div>
+                {% endif %}
+                {% if email or customer_id == seller_id %}
+                  <div class="seller-email">
+                    <i class="fa fa-envelope-o"></i>
+                    {{ partner['email']}}
+                  </div>
+                {% endif %}
+              </div>
+              {% if marketplace_customercontactseller %}
+              <div class="lower-contact-seller">
+                <div class="cennect-text">
+                  {{ text_connect}}
+                </div>
+                <div class="connect-icons">
+                  <span>
+                    {% if partner['facebookid'] is defined and partner['facebookid'] %}
+                      <a href="http://facebook.com/{{ partner['facebookid'] }}">
+                        <i class="fa fa-facebook-square"></i>
+                      </a>
+                    {% endif %}
+                  </span>
+                  <span>
+                    {% if partner['twitterid'] is defined and partner['twitterid'] %}
+                      <a href="http://twitter.com/{{ partner['twitterid'] }}">
+                        <i class="fa fa-twitter"></i>
+                      </a>
+                    {% endif %}
+                  </span>
+                  <span>
+                    {% if logged %}
+                      <a data-target="#myModal-seller-mail" data-toggle="modal">
+                        <i class="fa fa-envelope-o"></i>
+                      </a>
+                    {% else %}
+                      <a href="{{ login}}" data-toggle="tooltip" data-original-title="{{ text_login_contact}}">
+                        <i class="fa fa-envelope"></i>
+                      </a>
+                    {% endif %}
+                  </span>
+                </div> <!-- connect-icons -->
+              </div> <!-- lower-contact-seller -->
+            {% endif %}
+            </div> <!-- contact-seller -->
+          </div> <!-- detail-container-inner -->
+        </div> <!-- seller-details-stripe-lower -->
+      </div> <!-- bannner-container -->
+      <div class="col-sm-3 left-panel">
+        <ul class="mp-list-group" id="main-tab">
+          <li class="mp-list-group-item mp-active">
+            <a data-tab="#tab-profile">
+              <i class="fa fa-user"></i>
+              {{ text_profile}}
+            </a>
+          </li>
+          {% if public_seller_profile is defined and 'store' in public_seller_profile %}
+          <li class="mp-list-group-item">
+            <a data-tab="#tab-store">
+              <i class="fa fa-clipboard"></i>
+              {{ text_store}}
+            </a>
+          </li>
+          {% endif %}
+          {% if public_seller_profile is defined and 'collection' in public_seller_profile %}
+          <li class="mp-list-group-item">
+            <a data-tab="#tab-collection">
+              <i class="fa fa-cubes"></i>
+              {{ text_collection ~ ' (' ~ (collection_total ? collection_total : '0') ~ ')' }}
+            </a>
+          </li>
+          {% endif %}
+          {% if public_seller_profile is defined and 'review' in public_seller_profile %}
+          <li class="mp-list-group-item">
+            <a data-tab="#tab-reviews">
+              <i class="fa fa-comment-o"></i>
+              {{ text_reviews ~ ' (' ~ (feedback_total ? feedback_total|round : '0') ~ ')' }}
+            </a>
+          </li>
+          {% endif %}
+          {% if public_seller_profile is defined and 'productReview' in public_seller_profile %}
+          <li class="mp-list-group-item">
+            <a data-tab="#tab-product-reviews">
+              <i class="fa fa-comments-o"></i>
+              {{ text_product_reviews ~ ' ('  ~ (product_feedback_total ? product_feedback_total : '0') ~ ')' }}
+            </a>
+          </li>
+          {% endif %}
+          {% if public_seller_profile is defined and 'location' in public_seller_profile %}
+          <li class="mp-list-group-item">
+            <a data-tab="#tab-location">
+              <i class="fa fa-globe"></i>
+              {{ text_location}}
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div> <!-- left-panel -->
+      <div class="col-sm-9 right-panel">
+        <div id="tab-profile" class="mp-tab-content mp-tab-active">
+          {{ partner['shortprofile'] | raw }}
+
+{% if informations is defined and informations %}
+  <h3 style="line-height: 24px;color: rgb(0, 0, 0);margin-top: 0px;">{{ text_seller_information }}</h3>
+  {% for information in informations %}
+    <div class="text-container">
+      <a href="{{ information['href'] }}" target="_blank">{{ information['title'] }}</a>
+    </div>
+  {% endfor %}
+{% endif %}
+        </div> <!-- tab-profile -->
+        <div id="tab-store" class="mp-tab-content">
+          {{ partner['companydescription'] | raw }}
+        </div> <!-- tab-store -->
+        <div id="tab-reviews" class="mp-tab-content">
+        {% if customer_id != seller_id %}
+          <div>
+            {% if logged %}
+              {% if give_review %}
+                <button type="button" data-toggle="modal" class="btn btn-warning btn-block" data-target="#myModal-seller-review">
+                {{ text_write_review}}
+              {% endif %}
+              </button>
+            {% else %}
+              <a href="{{ login}}" class="btn btn-warning btn-block" data-toggle="tooltip" data-original-title="{{ text_login_review}}">
+                {{ text_write_review}}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+          <div id="prev-reviews">
+
+          </div>
+        </div> <!-- tab-reviews -->
+        <div id="tab-product-reviews" class="mp-tab-content"></div> <!-- tab-product-reviews -->
+        <div id="tab-collection" class="mp-tab-content"></div> <!-- tab-collection -->
+        <div id="tab-location" class="mp-tab-content"></div> <!-- tab-collection -->
+        <div id="dummy-collection"></div>
+      </div> <!-- right-panel -->
+    </div> <!-- content -->
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% if logged %}
+<div class="modal fade" id="myModal-seller-mail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ text_close}}</span></button>
+        <h3 class="modal-title">{{ text_ask_seller}}</h3>
+      </div>
+      <form id="seller-mail-form">
+        <div class="modal-body">
+          <div class="form-group required">
+            <label class="control-label" for="input-subject">{{ text_subject}}</label>
+            <input type="text" name="subject" id="input-subject" class="form-control" />
+            {% if partner is defined %}
+            <input type="hidden" name="seller" value="{{ seller_id}}"/>
+            {% endif %}
+          </div>
+          <div class="form-group required">
+            <label class="control-label" for="input-message">{{ text_ask}}</label>
+            <textarea class="form-control" name="message" rows="3" id="input-message"></textarea>
+          </div>
+          <div class="error text-center text-danger"></div>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ text_close}}</button>
+        <button type="button" class="btn btn-primary" id="send-mail">{{ text_send}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
+
+  <div class="modal fade" id="myModal-seller-review" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ text_close}}</span></button>
+        <h3 class="modal-title">{{ text_write_review}}</h3>
+      </div>
+      <div class="modal-body" id="review-modal">
+        <form class="form-horizontal" id="seller_review_form">
+          <div class="form-group required">
+            <div class="col-sm-12">
+              <label class="control-label" for="input-name">{{ text_nickname}}</label>
+              <input type="text" name="name" value="" id="input-name" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group required">
+            <div class="col-sm-12">
+              <label class="control-label" for="input-review">{{ text_review}}</label>
+              <textarea name="text" rows="5" id="input-review" class="form-control"></textarea>
+              <div class="help-block">{{ text_note}}</div>
+            </div>
+          </div>
+          {% if review_fields is defined and review_fields %}
+            {% for review_field in review_fields %}
+              <div class="form-group required">
+                <div class="col-sm-12">
+                  <label class="control-label">{{ review_field['field_name']}}</label>
+                  &nbsp;&nbsp;&nbsp; {{ entry_bad}}&nbsp;
+                  {% for i in 1..5 %}
+                    <input type="radio" id="review_attributes[{{ review_field['field_id']}}]" name="review_attributes[{{ review_field['field_id']}}]" value="{{ i}}" />
+                  {% endif %}
+                  &nbsp;{{ entry_good}}
+                </div>
+              </div>
+            <?php }
+          {% endif %}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ text_close}}</button>
+        <button type="button" id="button-review" data-loading-text="{{ text_loading}}" class="btn btn-primary">{{ text_send}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+collectionUrl = '{{ collection}}';
+
+function loadCollection(showMenu){
+  $.ajax({
+    url : collectionUrl,
+    dataType: 'html',
+    success: function(response) {
+      categoryMenu = $(response).find('#column-left').html();
+      $('#category-menu').remove();
+      $('.left-panel').append(categoryMenu);
+      $('#tab-collection').html($(response).find('#mp-products').html());
+      if(showMenu) {
+        $('#category-menu').show();
+      }
+      if (localStorage.getItem('display') == 'list') {
+        $('#list-view').trigger('click');
+      } else {
+        $('#grid-view').trigger('click');
+      }
+    }
+  })
+}
+
+(function($) {
+  $('#main-tab li').on('click', function() {
+    tab = $(this).children('a').data('tab');
+    $('.mp-list-group li').removeClass('mp-active');
+    $(this).addClass('mp-active');
+    $('.mp-tab-content').removeClass('mp-tab-active');
+    $(tab).addClass('mp-tab-active');
+    if(tab == '#tab-collection') {
+      $('#category-menu').show();
+    } else {
+      $('#category-menu').hide();
+    }
+  });
+
+  $.ajax({
+      url : '{{ feedback}}',
+      dataType: 'html',
+      success: function(response) {
+        $('#prev-reviews').html(response);
+      }
+    });
+
+  $.ajax({
+    url : '{{ product_feedback}}',
+    dataType: 'html',
+    success: function(response) {
+      $('#tab-product-reviews').html(response);
+    }
+  });
+
+  loadCollection(false);
+
+})(jQuery)
+
+$('body').on('click', '#category-menu li', function() {
+  collectionUrl = $(this).children('a').data('collection-url');
+  $('#category-menu li').removeClass('mp-active');
+  $(this).addClass('mp-active');
+  loadCollection(true);
+})
+
+{% if showCollection %}
+  $('a[data-tab="#tab-collection"]').trigger('click');
+{% endif %}
+
+{% if logged %}
+$('#send-mail').on('click',function(){
+  f = 0;
+  $('#myModal-seller-mail input[type=\'text\'],#myModal-seller-mail textarea').each(function () {
+    if ($(this).val() == '') {
+      $(this).parent().addClass('has-error');
+      f++;
+    }else{
+      $(this).parent().removeClass('has-error');
+    }
+  });
+
+  if (f > 0) {
+    $('#myModal-seller-mail .error').text('{{ text_error_mail}}').slideDown('slow').delay(2000).slideUp('slow');
+  } else {
+    $('#send-mail').addClass('disabled');
+    $('#myModal-seller-mail').addClass('mail-procss');
+    $('.alert-success').remove();
+    $('#myModal-seller-mail .modal-body').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ text_success_mail}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+    $.ajax({
+      url: '{{ send_mail}}',
+      data: $('#seller-mail-form').serialize()+'{{ mail_for}}',
+      type: 'post',
+      dataType: 'json',
+      complete: function () {
+        $('#send-mail').removeClass('disabled');
+        $('#myModal-seller-mail input,#myModal-seller-mail textarea').each(function () {
+          if(this.type != 'hidden'){
+            $(this).val('');
+            $(this).text('');
+          }
+        });
+      }
+    });
+  }
+});
+{% endif %}
+</script>
+
+<script type="text/javascript">
+
+localocation = false;
+$('#main-tab li').on('click',function(){
+  if(!localocation){
+    $.ajax({
+      url: '{{ loadLocation}}',
+      dataType: 'html',
+      success: function(response) {
+        $('#tab-location').html(response);
+      }
+    });
+    localocation = true;
+  }
+})
+
+/**
+ * [To store feedback]
+ * @return {none} [It will not return anything just reflect the form if unsuccessful and empty the form if successful]
+ */
+$('#button-review').on('click', function() {
+  
+  $.ajax({
+    url: '{{ writeFeedback}}',
+    type: 'post',
+    dataType: 'json',
+    data: $('#seller_review_form input[type=\'text\'],input[type=\'radio\']:checked,textarea'),
+    beforeSend: function() {
+      $('#button-feedback').button('loading');
+    },
+    complete: function() {
+      $('#button-feedback').button('reset');
+    },
+    success: function(json) {
+      $('.alert-success, .alert-danger').remove();
+
+      if (json['error']) {
+        $('#review-modal').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button class="close" type="button" data-dismiss="alert" >&times;</button></div>');
+      }
+      if (json['success']) {
+        $('.alert-success').remove();
+        $('#review-modal').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+        $('input[name=\'name\']').val('');
+        $('textarea[name=\'text\']').val('');
+        $('input[name=\'price_rating\']:checked').prop('checked', false);
+        $('input[name=\'quality_rating\']:checked').prop('checked', false);
+        $('input[name=\'value_rating\']:checked').prop('checked', false);
+      }
+    }
+  });
+});
+
+</script>
+
+<script>
+// Product List
+$('body').on('click', '#list-view', function() {
+  $('#content .product-layout > .clearfix').remove();
+
+  $('#content .product-layout').attr('class', 'product-layout product-list col-xs-12');
+
+  localStorage.setItem('display', 'list');
+});
+
+// Product Grid
+$('body').on('click', '#grid-view', function() {
+  $('#content .product-layout > .clearfix').remove();
+
+  // What a shame bootstrap does not take into account dynamically loaded columns
+  cols = $('#column-right, #column-left').length;
+
+  if (cols == 2) {
+    $('#content .product-layout').attr('class', 'product-layout product-grid col-lg-6 col-md-6 col-sm-12 col-xs-12');
+
+    $('#content .product-layout:nth-child(2)').after('<div class="clearfix visible-md visible-sm"></div>');
+  } else if (cols == 1) {
+    $('#content .product-layout').attr('class', 'product-layout product-grid col-lg-4 col-md-4 col-sm-6 col-xs-12');
+
+    $('#content .product-layout:nth-child(3)').after('<div class="clearfix visible-lg"></div>');
+  } else {
+    $('#content .product-layout').attr('class', 'product-layout product-grid col-lg-4 col-md-3 col-sm-6 col-xs-12');
+
+    $('#content .product-layout:nth-child(3)').after('<div class="clearfix"></div>');
+  }
+
+   localStorage.setItem('display', 'grid');
+});
+
+if (localStorage.getItem('display') == 'list') {
+  $('#list-view').trigger('click');
+} else {
+  $('#grid-view').trigger('click');
+}
+
+$('body').on('change', '#seller-collection select',function() {
+  collectionUrl = this.value;
+  loadCollection(true);
+  // $('a[href=\'#tab-collection\']').append(' <i class="fa fa-spinner fa-spin remove-me"></i>');
+  // $('#tab-collection').load(thisvalue,function(){
+  //     $('.remove-me').remove();
+  //   });
+});
+
+$('body').on('click','#seller-collection a',function(e){
+  if(!$(this).hasClass('default-work'))
+    e.preventDefault();
+  else
+    return;
+
+  thisvalue = this.href;
+  $('a[data-tab=\'#tab-collection\']').append(' <i class="fa fa-spinner fa-spin remove-me"></i>');
+  $('#tab-collection').load(thisvalue,function(){
+      $('.remove-me').remove();
+    });
+});
+</script>
+{{ footer}}

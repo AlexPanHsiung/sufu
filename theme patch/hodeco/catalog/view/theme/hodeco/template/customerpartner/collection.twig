@@ -1,0 +1,307 @@
+<?php $theme_options = $this->registry->get('theme_options')}}
+
+<div id="seller-collection">
+
+<!-- for category list-->
+{% if categories %}
+	<column id="column-left" style="display:none">
+		<ul class="mp-list-group" id="category-menu" style="display:none">
+			{% for category in categories %}
+				{% if category['category_id'] == category_id %}
+					<li class="mp-list-group-item mp-active">
+						<a data-collection-url="{{ category['href']}}">{{ category['name']}}</a>
+					</li>
+					{% if category['children'] %}
+						{% for child in category['children'] %}
+							{% if child['category_id'] == child_id %}
+								<li class="mp-list-group-item mp-active">
+									<a data-collection-url="{{ child['href']}}">&nbsp;&nbsp;&nbsp;- {{ child['name']}}</a>
+								</li>
+							{% else %}
+								<li class="mp-list-group-item">
+									<a data-collection-url="{{ child['href']}}" >&nbsp;&nbsp;&nbsp;- {{ child['name']}}</a>
+								</li>
+							{% endif %}
+						{% endif %}
+					{% endif %}
+				{% else %}
+				<li class="mp-list-group-item">
+					<a data-collection-url="{{ category['href']}}" >{{ category['name']}}</a>
+				</li>
+				{% endif %}
+			{% endif %}
+		</ul>
+	</column>
+{% endif %}
+
+{% if products %}
+	
+	{% set class = 'col-sm-12' %}
+	<div id="mp-products">
+		<div class="{{ class}}" id="seller-collection">
+			<p><a href="{{ compare}}" id="compare-total" class="default-work">{{ text_compare}}</a></p>
+			<div class="row">
+				<div class="col-md-4">
+				  <div class="btn-group">
+				    <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_list}}"><i class="fa fa-th-list"></i></button>
+				    <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_grid}}"><i class="fa fa-th"></i></button>
+				  </div>
+				</div>
+				<div class="col-md-2 text-right">
+				  <label class="control-label" for="input-sort">{{ text_sort}}</label>
+				</div>
+				<div class="col-md-3 text-right">
+				  <select id="input-sort" class="form-control col-sm-3">
+				    {% for sorts in sorts %}
+				    {% if sorts['value'] == sort ~ '-' ~ order %}
+				    <option value="{{ sorts['href']}}" selected="selected">{{ sorts['text']}}</option>
+				    {% else %}
+				    <option value="{{ sorts['href']}}">{{ sorts['text']}}</option>
+				    {% endif %}
+				    {% endif %}
+				  </select>
+				</div>
+				<div class="col-md-1 text-right">
+				  <label class="control-label" for="input-limit">{{ text_limit}}</label>
+				</div>
+				<div class="col-md-2 text-right">
+				  <select id="input-limit" class="form-control">
+				    {% for limits in limits  %}
+				    {% if limits['value'] == limit %}
+				    <option value="{{ limits['href']}}" selected="selected">{{ limits['text']}}</option>
+				    {% else %}
+				    <option value="{{ limits['href']}}">{{ limits['text']}}</option>
+				    {% endif %}
+				    {% endif %}
+				  </select>
+				</div>
+			</div>
+			<br />
+			<div class="hidden-xs" style="display:block">
+			  <div class="product-grid">
+			    <div class="row">
+			     {% for product in products %}
+			       <div class="col-sm-3">
+			          <?php
+						$theme_options = $this->registry->get('theme_options');
+						$config = $this->registry->get('config');
+						}}
+						<!-- Product -->
+						<div class="product clearfix">
+							<div class="left">
+								<?php if ($product['thumb']) { }}
+									<?php if($product['special'] && $theme_options->get( 'display_text_sale' ) != '0') { }}
+										<?php $text_sale = 'Sale';
+										if($theme_options->get( 'sale_text', $config->get( 'config_language_id' ) ) != '') {
+											$text_sale = $theme_options->get( 'sale_text', $config->get( 'config_language_id' ) );
+										{% endif %}
+										<?php if($theme_options->get( 'type_sale' ) == '1') { }}
+											<?php $product_detail = $theme_options->getDataProduct( $product['product_id'] );
+											$roznica_ceny = $product_detail['price']-$product_detail['special'];
+											$procent = ($roznica_ceny*100)/$product_detail['price']}}
+											<div class="sale">-{{ round($procent)}}%</div>
+										{% else %}
+											<div class="sale">{{ text_sale}}</div>
+										{% endif %}
+									{% endif %}
+									
+									<div class="image">
+										
+										
+
+									<div class="flybar hidden-xs hidden-sm hidden-md">
+										
+										<?php if($theme_options->get( 'category_page_display_add_to_compare' ) != '0') { }}
+											<div class="compare">			
+												<a onclick="compare.add('{{ product['product_id']}}');" title="<?php if($theme_options->get( 'add_to_compare_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_compare_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to compare'; {% endif %}" class="fa  fa-external-link product-icon"></a></a>	
+											</div>
+										{% endif %}
+										
+										<?php if($theme_options->get( 'category_page_display_quickview' ) != '0') { }}
+											<div class="quickview">
+												<a rel="{{ product['href']}}" title="{{ product['name']}}" class="fa fa-search"></a>
+											</div>
+										{% endif %}
+
+										<?php if($theme_options->get( 'category_page_display_add_to_wishlist' ) != '0') { }}
+											<div class="wishlist">
+												<a onclick="wishlist.add('{{ product['product_id']}}');" title="<?php if($theme_options->get( 'add_to_wishlist_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_wishlist_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to wishlist'; {% endif %}" class="fa fa-heart-o product-icon"></a></a>	
+											</div>
+										{% endif %}
+										
+										<?php if($theme_options->get( 'category_page_display_add_to_cart' ) != '0') { }}
+											<div class="addtocart">
+											<a onclick="cart.add('{{ product['product_id']}}');" class="button"><span><?php if($theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to cart'; {% endif %}</span></a>
+											</div>
+										{% endif %}
+									</div>
+
+										
+										<a href="{{ product['href']}}">
+											<img src="{{ product['thumb']}}" alt="{{ product['name']}}"/>
+										</a>
+									</div>
+								{% else %}
+									<div class="image">
+										<?php if($theme_options->get( 'quick_view' ) != '0') { }}
+										<div class="quickview">
+											<a rel="{{ product['href']}}" title="{{ product['name']}}" class="fa  fa-eye"></a>
+										</div>
+										{% endif %}
+										
+										<a href="{{ product['href']}}"><img src="image/no_image.jpg" alt="{{ product['name']}}" /></a>
+									</div>
+								{% endif %}
+							</div>
+							<div class="right">
+								<div class="name"><a href="{{ product['href']}}">{{ product['name']}}</a></div>
+								<div class="price">
+									{% if not product['special'] %}
+									{{ product['price']}}
+									{% else %}
+									<span class="price-old">{{ product['price']}}</span> <span class="price-new">{{ product['special']}}</span>
+									{% endif %}
+								</div>
+								<?php if ($theme_options->get( 'category_page_display_rating' ) != '0') { }}
+								<div class="rating"><i class="fa fa-star<?php if($product['rating'] >= 1) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 2) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 3) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 4) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 5) { echo ' active'; {% endif %}"></i></div>
+								{% endif %}
+
+						<div class="visible-xs visible-sm visible-md">
+										<?php if($theme_options->get( 'display_add_to_cart' ) != '0') { }}
+											<div class="addtocart" style="opacity: 1; filter: alpha(opacity=100);-webkit-transform: scale(1,1);-ms-transform: scale(1,1);transform: scale(1,1); margin-bottom: 20px;">
+											<a onclick="cart.add('{{ product['product_id']}}');" class="button"><span><?php if($theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to cart'; {% endif %}</span></a>
+											</div>
+										{% endif %}
+								</div>
+								
+							</div>
+						</div>
+			       </div>
+			     {% endif %}
+			    </div>
+			  </div>
+			</div>
+
+			 <?php
+				$theme_options = $this->registry->get('theme_options');
+				$config = $this->registry->get('config');
+			 }}
+
+			<!-- product-list -->
+			<div class="product-list" style="display:none">
+			  	{% for product in products %}
+			  	<!-- Product -->
+			  	<div>
+			  		<div class="row">
+			  			<div class="image col-sm-3">
+			  				<?php if($product['special'] && $theme_options->get( 'display_text_sale' ) != '0') { }}
+			  					<?php $text_sale = 'Sale';
+			  					if($theme_options->get( 'sale_text', $config->get( 'config_language_id' ) ) != '') {
+			  						$text_sale = $theme_options->get( 'sale_text', $config->get( 'config_language_id' ) );
+			  					{% endif %}
+			  					<?php if($theme_options->get( 'type_sale' ) == '1') { }}
+			  					<?php $product_detail = $theme_options->getDataProduct( $product['product_id'] );
+			  					$roznica_ceny = $product_detail['price']-$product_detail['special'];
+			  					$procent = ($roznica_ceny*100)/$product_detail['price']}}
+			  					<div class="sale">-{{ round($procent)}}%</div>
+			  					{% else %}
+			  					<div class="sale">{{ text_sale}}</div>
+			  					{% endif %}
+			  				{% endif %}
+			  				<?php if($product['thumb']) { }}
+			  				<a href="{{ product['href']}}"><img src="{{ product['thumb']}}" alt="{{ product['name']}}" /></a>
+			  				{% else %}
+			  				<a href="{{ product['href']}}"><img src="image/no_image.jpg" alt="{{ product['name']}}" /></a>
+			  				{% endif %}
+			  			</div>
+			  			
+			  			<div class="name-desc col-sm-6">
+			  				<div class="name"><a href="{{ product['href']}}">{{ product['name']}}</a></div>
+			  				<div class="description">{{ product['description']}}</div>
+							<?php if ($theme_options->get( 'category_page_display_rating' ) != '0') { }}
+									<div class="rating-reviews clearfix">
+										<div class="rating"><i class="fa fa-star<?php if($product['rating'] >= 1) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 2) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 3) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 4) { echo ' active'; {% endif %}"></i><i class="fa fa-star<?php if($product['rating'] >= 5) { echo ' active'; {% endif %}"></i></div>
+									</div>
+								{% endif %}
+			  				
+			  			</div>
+			  			
+			  			<div class="actions col-sm-3">
+			  				<div>
+			  					<div class="price">
+			  						{% if not product['special'] %}
+			  						{{ product['price']}}
+			  						{% else %}
+			  						<span class="price-old">{{ product['price']}}</span> <span class="price-new">{{ product['special']}}</span>
+			  						{% endif %}
+			  					</div>
+
+			<div class="tg-mobile visible-xs visible-sm visible-md">
+							
+							
+							<?php if($theme_options->get( 'display_add_to_cart' ) != '0') { }}
+								<div class="addtocart" style="opacity: 1; filter: alpha(opacity=100);-webkit-transform: scale(1,1);-ms-transform: scale(1,1);transform: scale(1,1); margin-bottom: 20px;">
+								<a onclick="cart.add('{{ product['product_id']}}');" class="button"><span><?php if($theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to cart'; {% endif %}</span></a>
+								</div>
+							{% endif %}
+						</div>
+			  					
+			  	
+								<?php if($theme_options->get( 'category_page_display_add_to_compare' ) != '0' || $theme_options->get( 'category_page_display_add_to_wishlist' ) != '0') { }}
+									<div class="flybar hidden-xs hidden-sm hidden-md">
+										<?php if($theme_options->get( 'category_page_display_add_to_compare' ) != '0') { }}
+											<div class="compare">			
+												<a onclick="compare.add('{{ product['product_id']}}');" title="<?php if($theme_options->get( 'add_to_compare_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_compare_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to compare'; {% endif %}" class="fa  fa-external-link product-icon"></a></a>	
+											</div>
+										{% endif %}
+									
+										<?php if($theme_options->get( 'category_page_display_add_to_wishlist' ) != '0') { }}
+											<div class="wishlist">
+												<a onclick="wishlist.add('{{ product['product_id']}}');" title="<?php if($theme_options->get( 'add_to_wishlist_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_wishlist_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to wishlist'; {% endif %}" class="fa fa-heart-o product-icon"></a></a>	
+											</div>
+										{% endif %}
+
+									</div>
+								{% endif %}
+								
+								<?php if($theme_options->get( 'category_page_display_add_to_cart' ) != '0') { }}
+									<div class="add-to-cart hidden-xs hidden-sm hidden-md"><a onclick="cart.add('{{ product['product_id']}}');" class="button"><span><?php if($theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ) != '') { echo $theme_options->get( 'add_to_cart_text', $config->get( 'config_language_id' ) ); } else { echo 'Add to cart'; {% endif %}</span></a></div>
+								{% endif %}
+
+								
+			  				</div>
+			  			</div>
+			  		</div>
+			  	</div>
+			  	{% endif %}
+			  </div>
+
+			<div class="row">
+				<div class="col-sm-6 text-left">{{ pagination}}</div>
+				<div class="col-sm-6 text-right">{{ results}}</div>
+			</div>
+		</div>
+	</div>
+{% else %}
+
+      <div class="row">
+        <div class="col-sm-3">
+          <ul>
+            {% for category in categories %}
+            <li><a href="{{ category['href']}}">{{ category['name']}}</a></li>
+            <ul>
+            	{% for child in category['children'] %}            		
+            		<li><a href="{{ child['href']}}">{{ child['name']}}</a></li>
+            	{% endif %} 
+            </ul>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+{% endif %}
+
+{% if not categories and not products %}
+	<p>{{ text_empty}}</p>
+{% endif %}
+
+

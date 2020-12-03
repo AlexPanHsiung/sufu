@@ -1,0 +1,180 @@
+<div id="seller-collection">
+	<div class="toolbar toolbar-products">
+		<!-- <p><a href="{{ compare }}" id="compare-total" class="default-work">{{ text_compare }}</a></p> -->
+		<div class="modes">
+			<div class="btn-group">
+				<button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_list}}"><i class="fa fa-th-list"></i></button>
+				<button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_grid}}"><i class="fa fa-th"></i></button>
+			</div>
+		</div>
+			<div class="col-md-5 text-right">
+				<label class="control-label" for="input-sort">{{ text_sort }}</label>
+			</div>
+			<div class="col-md-3 text-right">
+				<select id="input-sort" class="form-control col-sm-3">
+					{% for sorts in sorts %}
+					{% if sorts['value'] == sort ~ '-' ~ order %}
+					<option value="{{ sorts['href']}}" selected="selected">{{ sorts['text']}}</option>
+					{% else %}
+					<option value="{{ sorts['href']}}">{{ sorts['text']}}</option>
+					{% endif %}
+					{% endfor %}
+				</select>
+			</div>
+			<div class="col-md-1 text-right">
+				<label class="control-label" for="input-limit">{{ text_limit }}</label>
+			</div>
+			<div class="col-md-2 text-right">
+				<select id="input-limit" class="form-control">
+					{% for limits in limits  %}
+					{% if limits['value'] == limit %}
+					<option value="{{ limits['href']}}" selected="selected">{{ limits['text']}}</option>
+					{% else %}
+					<option value="{{ limits['href']}}">{{ limits['text']}}</option>
+					{% endif %}
+					{% endfor %}
+				</select>
+			</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+			<!-- for category list-->
+			{% if categories %}
+				<column id="column-left">
+					<ul class="mp-list-group" id="category-menu" style="border:none;box-shadow:unset;">
+
+						<li class="mp-list-group-item mp-list-group-collection active">
+						  <a data-collection-url="{{ collection_url }}" class="default-work">{{ 'All' }}</a>
+						  <i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+						</li>
+
+						{% for category in categories %}
+							{% if category['category_id'] == category_id %}
+								<li class="mp-list-group-item mp-list-group-collection active">
+									<a data-collection-url="{{ category['href'] }}" class="default-work">{{ category['name'] }}</a>
+									<i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+								</li>
+								{% if category['children'] %}
+									{% for child in category['children'] %}
+										{% if child['category_id'] == child_id %}
+											<li class="mp-list-group-item mp-list-group-collection active hide-child">
+												<a data-collection-url="{{ child['href'] }}" class="default-work">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a>
+											</li>
+										{% else %}
+											<li class="mp-list-group-item mp-list-group-collection active hide-child">
+												<a data-collection-url="{{ child['href'] }}" class="default-work">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a>
+											</li>
+											{% endif %}
+										{% endfor %}
+									{% endif %}
+								{% else %}
+							<li class="mp-list-group-item mp-list-group-collection active">
+								<a data-collection-url="{{ category['href'] }}" class="default-work">{{ category['name'] }}</a>
+								<i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+							</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</column>
+			{% endif %}
+		</div>
+
+		<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+			{% if products %}
+				<div id="mp-products">
+					<div id="seller-collection">
+						<div class="custom-products custom-products-row">
+							{% for product in products %}
+							<div class="product-layout product-list col-xs-12">
+			              <div class="product-thumb">
+			                <div class="item">
+			                  <div class="item-inner">
+			                    <div class="caption caption-top">
+			                      <h4 class="product-name"><a href="{{product['href']}}">{{product['name']}}</a></h4>
+			                         {% if product['rating'] %}
+			                        <div class="rating"><div class="rating-box">
+			                          {% for i in 1..5 %}
+			                          {% if product['rating'] < i %}
+			                          <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+			                          {% else %}
+			                          <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+			                          {% endif %}
+			                          {% endfor %}
+			                        </div></div>
+			                        {% endif %}
+
+			                                        </div>
+			                    <div class="image images-container">
+			                      <a href="{{product['href']}}" class="product-image">
+			                        <img src="{{ product['thumb']}}" alt="{{product['name']}}" title="{{product['name']}}" class="img-responsive">
+			                        <img class="img-r" src="{{ product['thumb']}}" alt="{{product['name']}}" title="{{product['name']}}"></a>
+			                    <div class="quick-view"><button class="button btn-quickview" type="button" title="Quick View" onclick="ocquickview.ajaxView('{{product['href']}}')"><span>Quick View</span></button></div>
+			                    </div>
+			                    <div class="caption">
+			                                          <p class="manufacture-product">
+			                      <a href="http://douxlms.com/digitech/index.php?route=product/manufacturer/info&amp;manufacturer_id=8">Apple</a>
+			                      </p>
+			                      {% if product['price'] %}
+			                        <div class="price-box">
+			                        <label></label>
+			                        {% if not product['special'] %}
+			                        <p class="special-price"><span class="price">{{ product['price']}}</span></p>
+			                        {% else %}
+			                        <p class="special-price"><span class="price">{{ product['special']}}</span></p><p class="old-price"><span class="price">{{ product['price']}}</span></p>
+			                        {% endif %}
+			                        {% if product['tax'] %}
+			                        <p class="price-tax"><span class="price">{{ text_tax}} {{ product['tax']}}</span></p>
+			                        {% endif %}
+			                        </div>
+			                      {% endif %}
+			                      <p class="product-des">{{ product['description']}}</p>
+			                      {% if showpartnerdetails is defined and showpartnerdetails %}
+			                      <div id="wk_seller_info_container" class="wk_seller_info">
+			                        <div style="padding: 10px;background-color: #f8f8f8;border-top: 8px solid orange;">
+			                          <div id="wk_seller_info_profpic">
+			                            <img src="{{ product['avatar']}}" width="100%" height="100%" style="vertical-align:baseline;">
+			                          </div>
+			                          <div id="wk_seller_info_box">
+			                            <h4 style="margin-bottom: 15px;margin-top: 0px;font-size: 13px;"><b>{{ text_seller}}</b></h4>
+			                            <a href="{{ product['sellerHref']}}"><p style="margin:0; line-height: 15px;"><b>{{ product['seller_name']}}</b></p></a>
+			                            {% if product['country'] %}
+			                            <p style="max-width:135px;line-height:14px;">{{ text_from }}
+			                                <span data-toggle="tooltip" title="{{ text_from}}"><i class="fa fa-home"></i></span>
+			                                <b>{{ product['country']}}</b>
+			                              </p>
+			                            {% endif %}
+			                          </div>
+			                        </div>
+			                      </div>
+			                      {% endif %}
+			                      <div class="action-links">
+			                        <button class="button btn-cart" type="button" title="{{ button_cart}}" onclick="cart.add('{{ product['product_id']}}');"><span>{{ button_cart}}</span></button>
+			                        <button class="button btn-wishlist" type="button" title="{{ button_wishlist}}" onclick="wishlist.add('{{ product['product_id']}}');"><span>{{ button_wishlist}}</span></button>
+			                        <button class="button btn-compare" type="button" title="{{ button_compare}}" onclick="compare.add('{{ product['product_id']}}');"><span>{{ button_compare}}</span></button>
+			                      </div>
+
+			                    </div>
+			                  </div>
+			                </div>
+			                          </div>
+			                      </div>
+							{% endfor %}
+						</div>
+
+						<!--<div class="row">
+							<div class="col-sm-6 text-left">{{ pagination }}</div>
+							<div class="col-sm-6 text-right">{{ results }}</div>
+						</div> -->
+						<div class="toolbar toolbar-products toolbar-bottom">
+                    <div class="toolbar-amount"><span>{{ results }}</span></div>
+					<div class="pages">{{ pagination }}</div>
+                </div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+		{% if not categories and not products %}
+			<p>{{ text_empty}}</p>
+		{% endif %}
+	</div>
+</div>

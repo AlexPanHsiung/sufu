@@ -1,0 +1,44 @@
+{% if module_marketplace_status is defined and module_marketplace_status %}
+    <li class="toggle-wrap"><a href="{{ menusell }}" class="toggle" title="{{ menusell }}">
+    <i class="fa fa-users"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_sell_header }}</span> <span class="caret"></span></a>
+        <ul class="toggle_cont toggle_cont__right">
+          {% if logged and chkIsPartner and marketplace_seller_mode is defined and marketplace_seller_mode %}
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'profile' in marketplace_allowed_account_menu %}
+                <li><a href="{{ mp_profile }}">{{ text_my_profile }}</a></li>
+            {% endif %}
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'dashboard' in marketplace_allowed_account_menu %}
+                <li><a href="{{ mp_dashboard }}">{{ text_dashboard }}</a></li>
+            {% endif %}
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'orderhistory' in marketplace_allowed_account_menu %}
+                <li><a href="{{ mp_orderhistory }}">{{ text_orderhistory }}</a></li>
+            {% endif %}
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'transaction' in marketplace_allowed_account_menu %}
+              <li><a href="{{ mp_transaction }}">{{ text_transaction }}</a></li>
+            {% endif %}
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'productlist' in marketplace_allowed_account_menu %}
+                <li><a href="{{ mp_productlist }}">{{ text_productlist }}</a></li>
+            {% endif %}
+
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'addproduct' in marketplace_allowed_account_menu %}
+                <li><a href="{{ mp_addproduct }}">{{ text_addproduct }}</a></li>
+            {% endif %}
+
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'downloads' in marketplace_allowed_account_menu %}
+                <li><a href="{{ mp_download }}">{{ text_download }}</a></li>
+            {% endif %}
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'asktoadmin' in marketplace_allowed_account_menu %}
+                <li><a id="ask-to-admin" data-toggle="modal" data-target="#myModal-seller-mail">{{ text_ask_admin }}</a></li>
+            {% endif %}
+            {% if marketplace_allowed_account_menu is defined and marketplace_allowed_account_menu and 'manageshipping' in marketplace_allowed_account_menu %}
+                <li><a href="{{ mp_add_shipping_mod }}">{{ text_wkshipping }}</a></li>
+            {% endif %}
+            <li id="wk-notify"><a id="notification" data-toggle="modal" data-target="#myModal-notification">{{ text_notifications }} {% if notification_total is defined and notification_total > 0 %}<span class="badge">{{ notification_total }}</span>{% endif %}</a></li>
+            <li role="presentation" class="divider"></li>
+            {% if separate_view is defined and separate_view %}
+              <li><a href="{{ separate_view }}">{{ text_separate_view }}</a></li>
+            {% endif %}
+          {% endif %}
+            <li><a href="{{ menusell }}">{{ text_sell_header }}</a></li>
+        </ul>
+    </li>
+{% endif %}

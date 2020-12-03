@@ -1,0 +1,10 @@
+2019-01-05 11:55:40 - ----------------------------------------------------------------
+MOD: Product Option Color and Size Combination Pro
+MISSING FILE!
+E:/xampp/htdocs/octw3020/catalog/controller/extension/onepagecheckout/confirm.php
+
+
+MOD: System modification
+NOT FOUND!
+CODE: $data['button_rebuild'] = $this->language->get('button_rebuild');
+FILE: admin/controller/catalog/category.php

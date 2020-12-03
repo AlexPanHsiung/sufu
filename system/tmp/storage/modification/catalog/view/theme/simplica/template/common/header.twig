@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="http://ogp.me/ns/fb#"
+      dir="{{ direction }}"
+      lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{{ title }} - {{ name }}</title>
+<base href="{{ base }}" />
+{% if description %}
+<meta name="description" content="{{ description }}" />
+{% endif %}
+{% if keywords %}
+<meta name="keywords" content="{{ keywords }}" />
+{% endif %}
+
+{% if fbThumb %}
+<meta property="og:image" content="{{ fbThumb.fbThumbSrc }}" />
+<meta property="og:image:width" content="{{ fbThumb.fbThumbWidth }}" />
+<meta property="og:image:height" content="{{ fbThumb.fbThumbHeight }}" />
+{% endif %}
+<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+<link href="catalog/view/theme/simplica/stylesheet/stylesheet.css" rel="stylesheet">
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+{% for analytic in analytics %}
+{{ analytic }}
+{% endfor %}
+<!-- Facebook Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '287795112416650');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id=287795112416650&ev=PageView&noscript=1"/></noscript>
+<!-- End Facebook Pixel Code -->
+
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" type="text/css" rel="stylesheet" media="screen" />
+      
+</head>
+<body>
+
+          {% if notification is defined and notification %} {{ notification }} {% endif %}
+      
+<nav id="top">
+  <div class="container">
+    <div class="visible-xs" style="display: inline-block; padding-top: 6px;">
+      <a href="index.php?route=product/search" style="color: #eee;"><i class="fa fa-search"></i></a>
+      {% if logged %}
+      <a href="{{ logout }}" style="float: right; color: white;">{{ text_logout }}</a>
+      {% endif %}
+    </div>
+    {{ currency }}
+    {{ language }}
+    <div id="top-links" class="nav pull-right hidden-xs" style="display: inline-block;">
+      <ul class="list-inline">
+        <li><a href="{{ contact }}"><i class="fa fa-phone"></i></a> <span class="hidden-xs">{{ telephone }}</span></li>
+        <li class="dropdown"><a href="{{ account }}" title="{{ text_account }}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_account }}</span> <span class="caret"></span></a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            {% if logged %}
+            <li><a href="{{ account }}">{{ text_account }}</a></li>
+            <li><a href="{{ order }}">{{ text_order }}</a></li>
+            <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
+            <li><a href="{{ download }}">{{ text_download }}</a></li>
+            <li><a href="{{ logout }}">{{ text_logout }}</a></li>
+            {% else %}
+            <li><a href="{{ register }}">{{ text_register }}</a></li>
+            <li><a href="{{ affiliate }}">{{ text_be_affiliate }}</a></li>
+            <li><a href="{{ login }}">{{ text_login }}</a></li>
+            {% endif %}
+          </ul>
+        </li>
+        <li><a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}"><i class="fa fa-heart"></i> <span class="hidden-xs">{{ text_wishlist }}</span></a></li>
+        <li><a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs">{{ text_shopping_cart }}</span></a></li>
+        <li><a href="{{ checkout }}" title="{{ text_checkout }}"><i class="fa fa-share"></i> <span class="hidden-xs">{{ text_checkout }}</span></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<nav class="sufu-nav col-xs-12 visible-xs">
+  <div class="container row">
+    <a class="col-xs-1 text-center" href="" style="width: 20%; padding: 0px;">
+      <i class="material-icons md-24" style="margin: top;">
+        home
+      </i>
+      </br>
+      首頁
+    </a>
+    <a class="col-xs-1 text-center" href="index.php?route=product/special" style="width: 20%; padding: 0px;">
+      <i class="material-icons md-24">
+        equalizer
+      </i>
+      </br>
+      促銷商品
+    </a>
+    <a class="col-xs-1 text-center" href="{{ wishlist }}" style="width: 20%; padding: 0px;">
+      <i class="material-icons md-24">
+        favorite_border
+      </i>
+      </br>
+      收藏
+    </a>
+    <a class="col-xs-1 text-center" href="{{ shopping_cart }}" style="width: 20%; padding: 0px;">
+      <i class="material-icons md-24">
+        shopping_cart
+      </i>
+      </br>
+      購物車
+    </a>
+    <a class="col-xs-1 text-center" href="{{ account }}" style="width: 20%; padding: 0px;">
+      <i class="material-icons md-24">
+        account_circle
+      </i>
+      </br>
+      會員中心
+    </a>
+  </div>
+</nav>
+<div id="return-top">
+  <a><i class="material-icons" style="font-size: 40px;">arrow_upward</i></a>
+</div>
+<header>
+  <div class="container">
+    <div class="row align-end">
+      <div class="col-sm-3 col-xs-12" style="margin-top: 65px;">
+        <div id="logo">{% if logo %}<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" style="width: 240px;" /></a>{% else %}
+          <h1><a href="{{ home }}">{{ name }}</a></h1>
+          {% endif %}</div>
+      </div>
+      <div class="col-sm-3 col-xs-12 hidden-xs">{{ search }}</div>
+      <div class="col-sm-3 col-xs-6">
+        <div class="btn-group btn-block">
+          <a id="be_affiliate" class="text-center" href="{{ affiliate }}">
+            <img src="image/catalog/HTML/295x70-join-affiliate.jpg" width="100%" style="padding-top: 15px; padding-bottom: 15px;"/>
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-3 col-xs-6">{{ cart }}</div>
+    </div>
+  </div>
+</header>
+{{ menu }}

@@ -1,0 +1,58 @@
+<h2>{{ text_instruction }}</h2>
+<div class="form-group">
+	<div style="width: 40%; display: inline-block;">
+		<label class="control-label">請輸入轉帳銀行</label>
+        <input type="text" name="bank_name" id="bank_name" placeholder="請輸入轉帳銀行" class="form-control" />
+    </div>
+	<div style="width: 40%; display: inline-block;">
+		<label class="control-label" style="white-space:nowrap;">請輸入銀行帳戶末5碼(對帳用)</label>
+        <input type="text" name="bank_account" id="bank_account" placeholder="請輸入銀行帳戶末5碼(對帳用)" class="form-control" />
+    </div>
+</div>
+<p><b>{{ text_description }}</b></p>
+<div class="well well-sm">
+  <p>{{ bank }}</p>
+  <p>{{ text_payment }}</p>
+</div>
+<div class="buttons">
+  <div class="pull-right">
+    <input type="button" value="{{ button_confirm }}" id="button-confirm" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#button-confirm').on('click', function() {
+	var bank_name = $('#bank_name').val();
+	var bank_account = $('#bank_account').val();
+	if(bank_name != '' && bank_account.length == 5){
+		$.ajax({
+			url: 'index.php?route=extension/payment/bank_transfer/confirm',
+			dataType: 'json',
+			type: 'POST',
+			data:{
+				bank_name: bank_name,
+				bank_account: bank_account
+			},
+			beforeSend: function() {
+				$('#button-confirm').button('loading');
+			},
+			complete: function() {
+				$('#button-confirm').button('reset');
+			},
+			success: function(json) {
+				if (json['redirect']) {
+					location = json['redirect'];	
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}else if(bank_name == ''){
+		alert("請輸入您的轉帳帳戶末5碼及銀行!");
+	}else if(bank_account.length != 5){
+		alert("請輸入您的轉帳帳戶末5碼!");
+	}else{
+		alert("請輸入您的轉帳帳戶末5碼及銀行!");
+	}
+});
+//--></script>

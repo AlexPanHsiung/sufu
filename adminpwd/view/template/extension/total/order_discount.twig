@@ -1,0 +1,138 @@
+{#
+* Total Order Discount v1.2 (https://github.com/underr-ua/ocmod3-total-order-discount)
+* Copyright 2018 Burkatskyi Andrii aka underr
+* Licensed under MIT - https://raw.githubusercontent.com/underr-ua/ocmod3-total-order-discount/master/LICENSE.txt
+#}
+
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-total" data-toggle="tooltip" title="{{ button_save }}"
+          class="btn btn-primary">
+          <i class="fa fa-save"></i>
+        </button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+          <i class="fa fa-reply"></i>
+        </a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li>
+          <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible">
+      <i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <i class="fa fa-pencil"></i>
+          {{ text_total_order_discount_edit }}
+        </h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-total" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="select-status">{{ entry_total_order_discount_status }}</label>
+            <div class="col-sm-10">
+              <select name="total_order_discount_status" id="select-status" class="form-control">
+                {% if total_order_discount_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="select-base">{{ entry_total_order_discount_base }}</label>
+            <div class="col-sm-10">
+              <select name="total_order_discount_base" id="select-base" class="form-control">
+                {% if (total_order_discount_base == 'qty') %}
+                <option value="sum">{{ text_total_order_discount_sum }}</option>
+                <option value="qty" selected="selected">{{ text_total_order_discount_qty }}</option>
+                {% else %}
+                <option value="sum" selected="selected">{{ text_total_order_discount_sum }}</option>
+                <option value="qty">{{ text_total_order_discount_qty }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-point">{{ entry_total_order_discount_point }}</label>
+            <div class="col-sm-10">
+              <input id="input-point" name="total_order_discount_point" class="form-control"
+                type="number" value="{{ total_order_discount_point }}" min="0" step="any"
+                placeholder="{{ entry_total_order_discount_point }}"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="select-type">{{ entry_total_order_discount_type }}</label>
+            <div class="col-sm-10">
+              <select name="total_order_discount_type" id="select-type" class="form-control">
+                {% if (total_order_discount_type == 'fix') %}
+                <option value="pct">{{ text_total_order_discount_pct }}</option>
+                <option value="fix" selected="selected">{{ text_total_order_discount_fix }}</option>
+                {% else %}
+                <option value="pct" selected="selected">{{ text_total_order_discount_pct }}</option>
+                <option value="fix">{{ text_total_order_discount_fix }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-value">{{ entry_total_order_discount_value }}</label>
+            <div class="col-sm-10">
+              <input id="input-value" name="total_order_discount_value" class="form-control"
+                type="number" value="{{ total_order_discount_value }}"
+                {% if total_order_discount_type == 'pct' %} min="-100" max="100" {% else%} min="0" {% endif %}  step="any"
+                placeholder="{{ entry_total_order_discount_value }}"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_total_order_discount_sort_order }}</label>
+            <div class="col-sm-10">
+              <input id="input-sort-order" name="total_order_discount_sort_order" class="form-control"
+                type="number" value="{{ total_order_discount_sort_order }}" min="0" step="1"
+                placeholder="{{ entry_total_order_discount_sort_order }}"
+              />
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+<!--
+$('#select-type').on('change', function() {
+  if ($(this).val() == "pct") {
+    $('#input-value').attr({'min': '-100', 'max': '100'});
+  } else if ($(this).val() == "fix") {
+    $('#input-value').removeAttr('max').attr({'min': 0})
+  }
+});
+//-->
+</script>
+{{ footer }}

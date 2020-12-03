@@ -1,0 +1,72 @@
+<div id="seller-collection">
+	<div class="row">
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+			<!-- for category list-->
+
+			{% if categories and categories is iterable %}
+				<column id="column-left">
+					<ul class="mp-list-group" id="category-menu" style="border:none;box-shadow:unset;">
+
+						<li class="mp-list-group-item mp-list-group-collection active">
+						  <a data-collection-url="{{ collection_url }}" class="default-work">{{ 'All' }}</a>
+						  <i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+						</li>
+
+						{% for category in categories %}
+							{% if category['category_id'] == category_id %}
+								<li class="mp-list-group-item mp-list-group-collection active">
+									<a data-collection-url="{{ category['href'] }}" class="default-work">{{ category['name'] }}</a>
+									<i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+								</li>
+								{% if category['children'] %}
+									{% for child in category['children'] %}
+										{% if child['category_id'] == child_id %}
+											<li class="mp-list-group-item mp-list-group-collection active hide-child">
+												<a data-collection-url="{{ child['href'] }}" class="default-work">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a>
+											</li>
+										{% else %}
+											<li class="mp-list-group-item mp-list-group-collection active hide-child">
+												<a data-collection-url="{{ child['href'] }}" class="default-work">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a>
+											</li>
+											{% endif %}
+										{% endfor %}
+									{% endif %}
+								{% else %}
+							<li class="mp-list-group-item mp-list-group-collection active">
+								<a data-collection-url="{{ category['href'] }}" class="default-work">{{ category['name'] }}</a>
+								<i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+							</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</column>
+			{% endif %}
+		</div>
+
+    {% if categories and categories is iterable %}
+		  <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+    {% else %}
+      <div class="col-xs-12">
+    {% endif %}
+			{% if products %}
+				<div id="mp-products">
+					<div id="seller-collection">
+              {#==== Product Listing ==== #}
+          		<div class="products-category">
+          		 {% include 'so-topdeal/template/soconfig/listing.twig' with {listingType: listingType} %}
+          		</div>
+
+          		{% else %}
+          			<p>{{ text_empty }}</p>
+          			<div class="buttons">
+          				<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+          			</div>
+          		{% endif %}
+              {#==== End Product Listing ==== #}
+				</div>
+		</div>
+		{% if not categories and not products %}
+			<p>{{ text_empty}}</p>
+		{% endif %}
+	</div>
+</div>

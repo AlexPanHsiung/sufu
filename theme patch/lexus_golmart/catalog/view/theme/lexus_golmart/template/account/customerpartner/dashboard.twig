@@ -1,0 +1,56 @@
+<?php  echo $header}} <?php require( ThemeControlHelper::getLayoutPath( 'common/mass-header.twig' )  )}}
+<div class="main-columns container space-20">
+    <div class="container-inside">
+  
+
+ {% if error_warning %}
+  <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>{{ error_warning}}</div>
+  {% endif %}
+  {% if success %}
+  <div class="alert alert-success"><i class="fa fa-check-circle"> </i> {{ success}}</div>
+  {% endif %}
+  <div class="row"><?php if( $SPAN[0] ): }}
+      <aside id="sidebar-left" class="col-md-{{ SPAN[0]}}">
+        {{ column_left }}
+      </aside>  
+    <?php endif}}
+
+
+    <div id="sidebar-main" class="col-md-{{ SPAN[1]}}"><div id="content" class="bg-white space-padding-20">{{ content_top}}
+    	<h2>{{ heading_title}}</h2>
+        <legend><i class="fa fa-pencil"></i> {{ heading_title}}</legend>
+        {% if isMember %}
+            {% if chkIsPartner %}
+                <div class="row">
+	                <div class="col-lg-4 col-md-4 col-sm-6">{{ order}}</div>
+	                <div class="col-lg-4 col-md-4 col-sm-6">{{ sale}}</div>
+	                <div class="col-lg-4 col-md-4 col-sm-6">{{ customer}}</div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-6">{{ low_stock}}</div>
+	                <div class="col-sm-6">
+		                {{ order_status}}
+	                </div>
+	            </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-12 col-sx-12 col-sm-12">{{ map}}</div>
+                <div class="col-lg-6 col-md-12 col-sx-12 col-sm-12">{{ chart}}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12"> {{ recent}} </div>
+              </div>
+            {% endif %}
+        {% else %}
+      <div class="text-danger">
+        {{ error_warning_authenticate}}
+      </div>
+      {% endif %}</div>
+      {{ content_bottom}}</div>
+    <?php if( $SPAN[2] ): }}
+  <aside id="sidebar-right" class="col-md-{{ SPAN[2]}}">  
+    {{ column_right}}
+  </aside>
+<?php endif}}</div>
+</div>
+</div>
+{{ footer}}

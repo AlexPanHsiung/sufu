@@ -1,0 +1,104 @@
+{{ header }}<?php require( ThemeControlHelper::getLayoutPath( 'common/mass-header.twig' )  )}}
+<div class="container">
+<?php require( ThemeControlHelper::getLayoutPath( 'common/mass-container.twig' )  )}}
+  {% if error_warning %}
+  <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>{{ error_warning}}</div>
+  {% endif %}
+  <div class="row">  <?php if( $SPAN[0] ): }}
+      <aside id="sidebar-left" class="col-md-{{ SPAN[0]}}">
+        {{ column_left }}
+      </aside>  
+    <?php endif}}
+    <div id="sidebar-main" class="col-md-{{ SPAN[1]}}"><div id="content">
+      {{ content_top}}    
+      <h1>
+        {{ heading_title}}
+        <div class="pull-right">
+          <a href="{{ back}}" data-toggle="tooltip" title="{{ button_back}}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+        </div>
+      </h1>
+      
+      <fieldset>
+        <legend><i class="fa fa-list"></i> {{ heading_title}}</legend>
+      {% if isMember %}
+        {% if not in_process %}          
+        <form action="{{ action}}" method="post" enctype="multipart/form-data"  class="form-horizontal">
+
+          <div class="form-group required">
+            <label class="col-sm-2 control-label" for="input-shoppartner"><span data-toggle="tooltip" title="{{ text_shop_name_info}}">{{ text_shop_name}}</span></label>
+            <div class="col-sm-10">
+
+              <div class="input-group"> 
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" name="shoppartner" value="{{ shoppartner}}" id="input-shoppartner" class="form-control" />
+              </div>
+
+              {% if error_shoppartner %}
+              <div class="text-danger">{{ error_shoppartner}}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="form-group required">
+            <label class="col-sm-2 control-label" for="input-entry"><span data-toggle="tooltip" title="{{ text_say_info}}">{{ text_say}}</span></label>
+            <div class="col-sm-10">
+              <textarea id="input-entry" name="description" class="form-control" rows="3">{{ description}}</textarea>
+              {% if error_description %}
+              <div class="text-danger">{{ error_description}}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="pull-right">
+            <input type="submit" value="{{ button_continue}}" class="btn btn-primary"/>
+          </div> 
+
+        </form>
+
+        {% else %}             
+          <div class="alert alert-info"><i class="fa fa-exclamation-circle"></i> {{ text_delay}}</div>
+        {% endif %}
+      {% else %}
+        <div class="text-danger">
+          {{ error_warning_authenticate}}
+        </div>
+      {% endif %}
+    </fieldset>
+  </div>
+  </div>
+</div>
+<?php if( $SPAN[2] ): }}
+  <aside id="sidebar-right" class="col-md-{{ SPAN[2]}}">{{ column_right}}</aside>
+<?php endif}}
+</div>
+
+{% if not in_process %}  
+<script>
+$( "#input-shoppartner" ).change(function() {
+  thisshop = this;
+  shop = $(thisshop).val();
+  
+  if(shop){
+
+    jQuery(thisshop).prev().html('<i class="fa fa-spinner fa-spin"></i>');
+
+    $.ajax({
+           type: 'POST',
+           data: ({shop: shop}),
+           dataType: 'json',
+           url: 'index.php?route=customerpartner/sell/wkmpregistation',
+           success: function(data){     
+
+              if(data['success']){
+                jQuery(thisshop).prev().html('<span data-toggle="tooltip" class="text-success" title="{{ text_avaiable}}"><i class="fa fa-thumbs-o-up"></i></span>');
+              }else if(data['error']){
+                jQuery(thisshop).prev().html('<span data-toggle="tooltip" class="text-danger" title="{{ text_no_avaiable}}"><i class="fa fa-thumbs-o-down"></i></span>');
+              }       
+            
+            }
+        });
+  }
+});
+</script>
+{% endif %}
+{{ footer}}

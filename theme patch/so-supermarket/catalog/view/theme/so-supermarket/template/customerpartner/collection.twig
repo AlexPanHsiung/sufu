@@ -1,0 +1,97 @@
+<style>
+body .short-by-show{
+	display:none;
+}
+</style>
+<div id="seller-collection">
+	{% if products %}
+		<div class="row collection-top">
+
+				<div class="col-md-4">
+					<div class="btn-group">
+						<button type="button" id="list-view" class="" data-toggle="tooltip" title="{{ button_list }}"><i class="fa fa-th-list"></i></button>
+						<button type="button" id="grid-view" class="" data-toggle="tooltip" title="{{ button_grid }}"><i class="fa fa-th"></i></button>
+					</div>
+				</div>
+				<div class="col-md-2 text-right">
+					<label class="control-label" for="input-sort">{{ text_sort }}</label>
+				</div>
+				<div class="col-md-3 text-right">
+					<select id="input-sort" class="form-control col-sm-3">
+						{% for sorts in sorts %}
+						{% if sorts['value'] == sort ~ '-' ~ order %}
+						<option value="{{ sorts['href']}}" selected="selected">{{ sorts['text']}}</option>
+						{% else %}
+						<option value="{{ sorts['href']}}">{{ sorts['text']}}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-1 text-right">
+					<label class="control-label" for="input-limit">{{ text_limit }}</label>
+				</div>
+				<div class="col-md-2 text-right">
+					<select id="input-limit" class="form-control">
+						{% for limits in limits  %}
+						{% if limits['value'] == limit %}
+						<option value="{{ limits['href']}}" selected="selected">{{ limits['text']}}</option>
+						{% else %}
+						<option value="{{ limits['href']}}">{{ limits['text']}}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+		</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<!-- for category list-->
+			{% if categories %}
+				<column id="column-left">
+					<ul id="category-menu" style="border:none;box-shadow:unset;width:100%;">
+
+						<li class="mp-list-group-item mp-list-group-collection active">
+						  <a data-collection-url="{{ collection_url }}" class="default-work">{{ 'All' }}</a>
+						  <i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+						</li>
+
+						{% for category in categories %}
+							{% if category['category_id'] == category_id %}
+								<li class="mp-list-group-item mp-list-group-collection active">
+									<a data-collection-url="{{ category['href'] }}" class="default-work">{{ category['name'] }}</a>
+									<i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+								</li>
+								{% if category['children'] %}
+									{% for child in category['children'] %}
+										{% if child['category_id'] == child_id %}
+											<li class="mp-list-group-item mp-list-group-collection active hide-child">
+												<a data-collection-url="{{ child['href'] }}" class="default-work">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a>
+											</li>
+										{% else %}
+											<li class="mp-list-group-item mp-list-group-collection active hide-child">
+												<a data-collection-url="{{ child['href'] }}" class="default-work">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a>
+											</li>
+											{% endif %}
+										{% endfor %}
+									{% endif %}
+								{% else %}
+							<li class="mp-list-group-item mp-list-group-collection active">
+								<a data-collection-url="{{ category['href'] }}" class="default-work">{{ category['name'] }}</a>
+								<i class="fa fa-caret-down" style="font-size:20px;float:right;"></i>
+							</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</column>
+			{% endif %}
+		</div>
+
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			{% if products %}
+			<div class="products-category">
+			{% include theme_directory~'/template/soconfig/listing.twig' with {listingType: listingType} %}
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>

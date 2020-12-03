@@ -1,0 +1,60 @@
+{% if error_warning %}
+<script type="text/javascript">alert('{{ error_warning }}');</script>
+{% else %}
+	{% for type in types %}
+       <div class="form-group">
+		 <label class="control-label" for="mta-{{ type }}-set">{{ entries_set[type] }}</label>
+         <div class="input-group">
+			<select id="mta-{{ type }}-set" class="form-control">
+				<option value="-1">{{ option_select }}</option>
+				<option value="0">{{ option_default }}</option>
+				{% for _id, _name in schemes %}
+				<option value="{{ _id }}">{{ _name }}</option>
+				{% endfor %}
+			</select>
+            <span class="input-group-btn">
+				<button type="button" class="btn btn-default mta_set_save_button" data-loading-text="{{ text_saving }}">{{ button_set }}</button>
+            </span></div>
+       </div>
+       <div class="form-group">
+		 <label class="control-label" for="mta-{{ type }}-save_default">{{ entries_save_default[type] }}</label>
+         <div class="input-group">
+			<select id="mta-{{ type }}-save_default" class="form-control">
+				<option value="-1">{{ option_select }}</option>
+				<option value="0">{{ option_default }}</option>
+				{% for _id, _name in schemes %}
+				{% if schemes_default[type]|default('') == _id %}
+				<option value="{{ _id }}" selected="selected">{{ _name }}</option>
+				{% else %}
+				<option value="{{ _id }}">{{ _name }}</option>
+				{% endif %}
+				{% endfor %}
+			</select>
+            <span class="input-group-btn">
+				<button type="button" class="btn btn-default mta_set_save_button" data-loading-text="{{ text_saving }}">{{ button_save_default }}</button>
+            </span></div>
+       </div>
+{% endfor %}
+<script type="text/javascript">
+	$('.mta_set_save_button').on('click', function() {
+		var _this = this;
+		var _p = $(_this).parent().parent();
+		var _s = $(_p).find('select[id^="mta-"]');
+		if($(_s).val() < 0) return;
+		var _s_id = $(_s).attr('id').split('-');
+		var _type = _s_id[1];
+		var _action = _s_id[2];
+		if(!confirm(_action == 'set' ? '{{ text_confirm_set }}' : '{{ text_confirm_save_default }}')) return;		
+		$(_this).button('loading');		
+		var _url = _action == 'set' ? '{{ url_set }}' : '{{ url_save_default }}';
+		$.post(_url, {type : _type, scheme_id : $(_s).val()}, function(_r) {
+			$(_this).button('reset');		
+			if(parseInt(_r) > 0) {				
+				if(_action == 'set' || $(_s).val() == '0') $(_s).val('-1');
+			} else {
+				alert('{{ alert_error }}');
+			}			
+		});
+	});	
+</script>	
+{% endif %}
